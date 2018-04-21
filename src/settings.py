@@ -1,1 +1,1 @@
-DATA_PATH='data/data.csv'
+DATA_PATH='data/random-data.csv'
