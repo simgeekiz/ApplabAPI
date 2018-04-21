@@ -1,5 +1,4 @@
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify#, render_template
 app = Flask(__name__)
 
 import json
@@ -10,7 +9,8 @@ import settings as st
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return "It works."
+    # return render_template('index.html')
 
 @app.route('/number_of_data')
 def get_numbers():
@@ -116,7 +116,7 @@ def get_scores(user_id, learning_obj_id, exercise_id):
 def insert():
     """Accepts data in JSON format and saves it to the file.
 
-    In order to use it, the data should be *POST'ed*.
+    In order to use it, the data should be *POSTed*.
     Usage example with Python requests library::
 
         import requests
