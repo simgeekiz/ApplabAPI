@@ -144,6 +144,9 @@ def insert():
     data_df = pd.DataFrame(request.get_json())
     df = df.append(data_df, ignore_index=True)
     # TODO: Calculate the scores right here before saving the data back (see calculate_scores())
+
+    calculate_scores(df)
+
     df.to_csv(DATA_PATH)
     return jsonify(message="Data succesfully inserted and saved.")
 
