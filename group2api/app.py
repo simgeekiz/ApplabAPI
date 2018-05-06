@@ -7,7 +7,10 @@ sys.path.append('..')
 import json
 from pymongo import MongoClient
 
-from .utils import calculations as calc
+try:
+    from .utils import calculations as calc
+except ImportError:
+    from utils import calculations as calc
 
 # Connect to mongoLab
 client = MongoClient(os.environ['MONGO_HOST'], os.environ['MONGO_PORT'])
