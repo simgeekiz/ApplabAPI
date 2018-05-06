@@ -13,7 +13,7 @@ except ImportError:
     from utils import calculations as calc
 
 # Connect to mongoLab
-client = MongoClient(os.environ['MONGO_HOST'], os.environ['MONGO_PORT'])
+client = MongoClient(os.environ['MONGO_HOST'], int(os.environ['MONGO_PORT']))
 db = client[os.environ['MONGO_DBNAME']]
 db.authenticate(os.environ['MONGO_DBUSER'], os.environ['MONGO_DBPASS'])
 

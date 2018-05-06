@@ -8,4 +8,4 @@ mv src/templates/_static src/static
 
 # _static
 # /static
-# AppLabServer/src/templates
+# AppLabServer/group2api/templates
