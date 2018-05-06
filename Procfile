@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath src app:app
+web: gunicorn --pythonpath group2api app:app
