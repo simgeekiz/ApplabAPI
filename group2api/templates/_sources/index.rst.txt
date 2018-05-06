@@ -9,7 +9,7 @@ Welcome to AppLabServer's documentation!
 app.py
 ------
 
-.. automodule:: src.app
+.. automodule:: group2api.app
    :members:
    :undoc-members:
    :show-inheritance:
@@ -17,7 +17,7 @@ app.py
 calculations.py
 ---------------
 
-.. automodule:: src.calculations
+.. automodule:: group2api.utils.calculations
    :members:
    :undoc-members:
    :show-inheritance:

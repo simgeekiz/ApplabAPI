@@ -80,8 +80,8 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Welcome to AppLabServer’s documentation!</a><ul>
-<li><a class="reference internal" href="#module-src.app">app.py</a></li>
-<li><a class="reference internal" href="#module-src.calculations">calculations.py</a></li>
+<li><a class="reference internal" href="#module-group2api.app">app.py</a></li>
+<li><a class="reference internal" href="#module-group2api.utils.calculations">calculations.py</a></li>
 </ul>
 </li>
 </ul>
@@ -150,13 +150,18 @@
             
   <div class="section" id="welcome-to-applabserver-s-documentation">
 <h1>Welcome to AppLabServer’s documentation!<a class="headerlink" href="#welcome-to-applabserver-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-src.app">
-<span id="app-py"></span><h2>app.py<a class="headerlink" href="#module-src.app" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-group2api.app">
+<span id="app-py"></span><h2>app.py<a class="headerlink" href="#module-group2api.app" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="src.app.get_exercises">
-<code class="descclassname">src.app.</code><code class="descname">get_exercises</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em><span class="sig-paren">)</span><a class="headerlink" href="#src.app.get_exercises" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.app.calculate_scores">
+<code class="descclassname">group2api.app.</code><code class="descname">calculate_scores</code><span class="sig-paren">(</span><em>user_id='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.calculate_scores" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_exercises">
+<code class="descclassname">group2api.app.</code><code class="descname">get_exercises</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_exercises" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the list of exercises has been done by the user on a particlar learning objective</p>
-<p>Usage example : &lt;hostname&gt;/scores/user_id=231412&amp;learning_obj_id=554363</p>
+<p>Usage example : &lt;hostname&gt;/exercises/user_id=231412&amp;learning_obj_id=554363</p>
 <dl class="docutils">
 <dt>user_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
 <dd>Give the id of the user</dd>
@@ -170,19 +175,19 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="src.app.get_numbers">
-<code class="descclassname">src.app.</code><code class="descname">get_numbers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.app.get_numbers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gives the total number of instances in the data</p>
-<p>Usage example : &lt;hostname&gt;/number_of_instances</p>
+<dt id="group2api.app.get_number_of_submissions">
+<code class="descclassname">group2api.app.</code><code class="descname">get_number_of_submissions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_number_of_submissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the total number of submissions</p>
+<p>Usage example : &lt;hostname&gt;/number_of_submissions</p>
 <dl class="docutils">
-<dt>number_of_instances <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
+<dt>number_of_submissions <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
 <dd>The list of user’s ids</dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
-<dt id="src.app.get_scores">
-<code class="descclassname">src.app.</code><code class="descname">get_scores</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em>, <em>exercise_id</em><span class="sig-paren">)</span><a class="headerlink" href="#src.app.get_scores" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.app.get_scores">
+<code class="descclassname">group2api.app.</code><code class="descname">get_scores</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em>, <em>exercise_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns ability score of the user on an exercise for a learning objective</p>
 <p>Usage example : &lt;hostname&gt;/scores/user_id=231412&amp;learning_obj_id=65745&amp;exercise_id=342342</p>
 <dl class="docutils">
@@ -200,8 +205,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="src.app.get_user_info">
-<code class="descclassname">src.app.</code><code class="descname">get_user_info</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#src.app.get_user_info" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.app.get_user_info">
+<code class="descclassname">group2api.app.</code><code class="descname">get_user_info</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_user_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the list of activities belongs to a specific user</p>
 <p>Usage example : &lt;hostname&gt;/user/user_id=231412</p>
 <dl class="docutils">
@@ -215,8 +220,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="src.app.get_user_list">
-<code class="descclassname">src.app.</code><code class="descname">get_user_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.app.get_user_list" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.app.get_user_list">
+<code class="descclassname">group2api.app.</code><code class="descname">get_user_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_user_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists the ids of the unique users</p>
 <p>Usage example : &lt;hostname&gt;/users</p>
 <dl class="docutils">
@@ -226,15 +231,16 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="src.app.hello_world">
-<code class="descclassname">src.app.</code><code class="descname">hello_world</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.app.hello_world" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.app.hello_world">
+<code class="descclassname">group2api.app.</code><code class="descname">hello_world</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.hello_world" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="src.app.insert">
-<code class="descclassname">src.app.</code><code class="descname">insert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.app.insert" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.app.insert">
+<code class="descclassname">group2api.app.</code><code class="descname">insert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.insert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accepts data in JSON format and saves it to the file.</p>
 <p>In order to use it, the data should be <em>POSTed</em>.
+Data should be consist of list of dictionaries.
 Usage example with Python requests library:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;SubmitDateTime&quot;</span><span class="p">:</span><span class="s2">&quot;2012-12-21 12:12:12.120&quot;</span><span class="p">,</span>
@@ -242,28 +248,49 @@ Usage example with Python requests library:</p>
          <span class="s2">&quot;ExerciseId&quot;</span><span class="p">:</span><span class="mi">141464536</span><span class="p">,</span>
          <span class="s2">&quot;LearningObjectiveId&quot;</span><span class="p">:</span><span class="mi">11424</span><span class="p">,</span>
          <span class="s2">&quot;Correct&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-         <span class="s2">&quot;AbilityAfterAnswer&quot;</span><span class="p">:</span><span class="s2">&quot;14143&quot;</span><span class="p">}</span>
+         <span class="s2">&quot;AbilityAfterAnswer&quot;</span><span class="p">:</span><span class="mi">14143</span><span class="p">}]</span>
 <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;&lt;hostname&gt;/insert&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
-<dt id="src.app.serve_docs">
-<code class="descclassname">src.app.</code><code class="descname">serve_docs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.app.serve_docs" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.app.response_time_enrichment">
+<code class="descclassname">group2api.app.</code><code class="descname">response_time_enrichment</code><span class="sig-paren">(</span><em>user_id='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.response_time_enrichment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates and adds the response time for each submission</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Only get the data without any response time</p>
+</div>
+<dl class="docutils">
+<dt>user_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string, (default=’all’)</span></dt>
+<dd>Give the id of the user. If given ‘all’, runs for
+each unique user in the database.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.serve_docs">
+<code class="descclassname">group2api.app.</code><code class="descname">serve_docs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.serve_docs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-src.calculations">
-<span id="calculations-py"></span><h2>calculations.py<a class="headerlink" href="#module-src.calculations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-group2api.utils.calculations">
+<span id="calculations-py"></span><h2>calculations.py<a class="headerlink" href="#module-group2api.utils.calculations" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="src.calculations.calculate_scores">
-<code class="descclassname">src.calculations.</code><code class="descname">calculate_scores</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.calculations.calculate_scores" title="Permalink to this definition">¶</a></dt>
+<dt id="group2api.utils.calculations.calculate_scores">
+<code class="descclassname">group2api.utils.calculations.</code><code class="descname">calculate_scores</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.utils.calculations.calculate_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the abilities scores</p>
-<div class="admonition-todo admonition" id="index-0">
+<div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
 <p class="last">Call this function in <code class="xref py py-func docutils literal notranslate"><span class="pre">app.insert()</span></code> function</p>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.utils.calculations.getResponseTime">
+<code class="descclassname">group2api.utils.calculations.</code><code class="descname">getResponseTime</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.utils.calculations.getResponseTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the response times for every answer except the first and last of the day</p>
 </dd></dl>
 
 </div>
