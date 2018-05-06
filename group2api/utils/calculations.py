@@ -2,8 +2,8 @@ import pandas as pd
 import math
 import datetime
 
-def getResponseTime(data):
-    """Computes the response times for every answer except the first and last of the day"""  
+def get_response_time(data):
+    """Computes the response times for every answer except the first and last of the day"""
     data = pd.DataFrame(data)
     data['SubmitDateTime'] = pd.to_datetime(data['SubmitDateTime'])
     data = data.sort_values(by="SubmitDateTime").reset_index(drop=True)
@@ -25,13 +25,8 @@ def getResponseTime(data):
     return enriched_json
 
 def calculate_scores(data):
-    """Calculates the abilities scores
-
-    .. todo:: Call this function in :func:`app.insert` function
+    """Calculates the ability scores
     """
-    # calculate the scores
-    # add the scores to data
-    # Return the enriched datas
 
     def getU(D,U):
         U = U - (1/40) + ((1/30) * D)
@@ -102,12 +97,12 @@ def calculate_scores(data):
         Es_ij = a_i * d_i * (div1/ div2 - 1)- (1 / (theta_j - beta_i))
         return Es_ij
 
-    def getExerciseAnswer(data):
+    def get_exercise_answer(data):
         # TODO develop this method Right now not in use
         return data["Correct"]
 
     data = pd.DataFrame(data)
-    data['SubmitDateTime'] = pd.to_datetime(data['SubmitDateTime'])    
+    data['SubmitDateTime'] = pd.to_datetime(data['SubmitDateTime'])
     unique_dates = sorted(list({item.date() for item in data['SubmitDateTime']}))
     D = [0] + [(unique_dates[u+1] - unique_dates[u]).days for u in range(0, len(unique_dates) - 1)]
     data['D'] = [D[unique_dates.index(date_time_obj.date())] for date_time_obj in  data["SubmitDateTime"]]
@@ -138,6 +133,6 @@ def calculate_scores(data):
         Es_ij = getExpectedScore(d_i[i], theta_j, beta_i)
 
         SSSS.append(Es_ij)
-    data['AbilityScore'] = SSSS 
+    data['AbilityScore'] = SSSS
     data_json = data.to_dict(orient='records')
     return data_json

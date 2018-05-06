@@ -149,7 +149,7 @@ def get_scores(user_id, learning_obj_id, exercise_id):
 def response_time_enrichment(user_id='all'):
     """Calculates and adds the response time for each submission
 
-    .. todo:: Only get the data without any response time
+    .. todo:: Only get the data that doesn't have any response time
 
     Parameters
     ----------
@@ -161,7 +161,7 @@ def response_time_enrichment(user_id='all'):
     for user_id in user_ids_list:
         user_subs = submissions.find({'UserId': int(user_id)}, {'_id':1, 'SubmitDateTime':1})
         user_subs = [sub for sub in user_subs]
-        resp_time_enrich = calc.getResponseTime(user_subs)
+        resp_time_enrich = calc.get_response_time(user_subs)
         for item in resp_time_enrich:
             submissions.update({'_id':item['_id']}, {'$set': {'ResponseTime':item['ResponseTime']}})
     return jsonify(message="Response times succesfully added.")
