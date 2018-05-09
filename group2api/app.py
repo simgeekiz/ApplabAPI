@@ -18,6 +18,7 @@ db = client[os.environ['MONGO_DBNAME']]
 db.authenticate(os.environ['MONGO_DBUSER'], os.environ['MONGO_DBPASS'])
 
 submissions = db['submissions']
+users = db['users']
 
 @app.route('/')
 def hello_world():
@@ -53,6 +54,42 @@ def get_user_list():
     """
     users = submissions.distinct('UserId')
     return jsonify(users)
+
+@app.route('/login_users')
+def get_user_login_info():
+    """get the userids, names and passwords
+
+    Usage example : <hostname>/user_login_info
+
+    Returns
+    -------
+    users : list of users for login
+        The list of user's ids,names and passwords
+    """
+    loginusers = users.find({}, {'_id':0})
+    allloginusers = []
+    for u in loginusers:
+        allloginusers.append(u)    
+    return jsonify(allloginusers)
+
+
+@app.route('/login_users/user_id=<user_id>')
+def get_user_login_info_with_user(user_id):
+    """get the userids, names and passwords
+
+    Usage example : <hostname>/user_login_info
+
+    Returns
+    -------
+    users : list of users for login
+        The list of user's ids,names and passwords
+    """
+    login_user_info = users.find({'UserId': int(user_id)}, {'_id':0})
+    login_user = []
+    for u in login_user_info:
+        login_user.append(u)    
+    return jsonify(login_user)
+
 
 @app.route('/user/user_id=<user_id>')
 def get_user_info(user_id):
