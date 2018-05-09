@@ -208,5 +208,9 @@ def insert():
     calculate_scores(user_id='all')
     return jsonify(message="Data succesfully inserted and saved.")
 
+@app.route('/see_change')
+def testing():
+    return jsonify(message="this is working :)")
+
 if __name__ == '__main__':
     app.run(debug=True)
