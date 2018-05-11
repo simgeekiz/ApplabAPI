@@ -15,17 +15,27 @@ except ImportError:
 # Connect to mongoLab
 client = MongoClient(os.environ['MONGO_HOST'], int(os.environ['MONGO_PORT']))
 db = client[os.environ['MONGO_DBNAME']]
-db.authenticate(os.environ['MONGO_DBUSER'], os.environ['MONGO_DBPASS'])
+
+# Authentication is only needed for db in mLab servers
+#db.authenticate(os.environ['MONGO_DBUSER'], os.environ['MONGO_DBPASS'])
 
 submissions = db['submissions']
 users = db['users']
 
 @app.route('/')
 def hello_world():
+    """Display the home page
+
+    Usage example : <hostname>/
+    """
     return 'For documentation see /docs'
 
 @app.route('/docs')
 def serve_docs():
+    """Display the documentations
+
+    Usage example : <hostname>/docs
+    """
     return render_template('index.html')
 
 @app.route('/number_of_submissions')
@@ -39,7 +49,7 @@ def get_number_of_submissions():
     number_of_submissions : list of integers
         The list of user's ids
     """
-    return jsonify(number_of_instances=submissions.count())
+    return jsonify(number_of_submissions=submissions.count())
 
 @app.route('/users')
 def get_user_list():
@@ -50,46 +60,62 @@ def get_user_list():
     Returns
     -------
     users : list of integers
-        The list of user's ids
+        The list of user ids
     """
-    users = submissions.distinct('UserId')
-    return jsonify(users)
+    user_list = submissions.distinct('UserId')
+    return jsonify(user_list)
 
 @app.route('/login_users')
 def get_user_login_info():
-    """get the userids, names and passwords
+    """Lists the userids, names and passwords
 
     Usage example : <hostname>/user_login_info
 
     Returns
     -------
-    users : list of users for login
-        The list of user's ids,names and passwords
+    all_login_users : list of dictionaries
+        The list of user login information
     """
     loginusers = users.find({}, {'_id':0})
-    allloginusers = []
-    for u in loginusers:
-        allloginusers.append(u)    
-    return jsonify(allloginusers)
+    all_login_users = [u for u in loginusers]  
+    return jsonify(all_login_users)
 
+@app.route('/login_users/username=<username>')
+def get_user_login_info_with_user(username):
+    """Get the user id, name and password based on username
 
-@app.route('/login_users/user_id=<user_id>')
-def get_user_login_info_with_user(user_id):
-    """get the userids, names and passwords
-
-    Usage example : <hostname>/user_login_info
+    Usage example : <hostname>/login_users/username=user15379
+    
+    Parameters
+    ----------
+    username : string
+        Give user name of the user.
 
     Returns
     -------
-    users : list of users for login
-        The list of user's ids,names and passwords
+    login_user : dictionary
+        User login information
     """
-    login_user_info = users.find({'UserId': int(user_id)}, {'_id':0})
-    login_user = []
-    for u in login_user_info:
-        login_user.append(u)    
+    login_user_info = users.find({'UserName': username}, {'_id':0})
+    login_user = [u for u in login_user_info]
     return jsonify(login_user)
 
+@app.route('/upload_login_users')
+def upload_login_users():
+    """Generates user information with default values
+
+    Usage example : <hostname>/user_login_info
+    """
+    submissions_user_ids = submissions.distinct('UserId')
+    users_user_ids = users.distinct('UserId')
+    user_ids = [uid for uid in submissions_user_ids if uid not in users_user_ids]
+    for uid in user_ids:
+        user_info = {}
+        user_info['UserId'] = uid
+        user_info['UserName'] = 'user{}'.format(str(uid))
+        user_info['Password'] = 1234
+        users.insert(user_info)
+    return jsonify(message="Users generated")
 
 @app.route('/user/user_id=<user_id>')
 def get_user_info(user_id):
@@ -112,7 +138,6 @@ def get_user_info(user_id):
     for info in infos:
         users_info.append(info)
     return jsonify(users_info)
-
 
 @app.route('/exercises/user_id=<user_id>&learning_obj_id=<learning_obj_id>')
 def get_exercises(user_id, learning_obj_id):
@@ -186,7 +211,7 @@ def get_scores(user_id, learning_obj_id, exercise_id):
 def response_time_enrichment(user_id='all'):
     """Calculates and adds the response time for each submission
 
-    .. todo:: Only get the data that doesn't have any response time
+    .. todo:: Run only on the data that doesn't have any response time
 
     Parameters
     ----------
@@ -205,7 +230,16 @@ def response_time_enrichment(user_id='all'):
 
 @app.route('/calculate_scores/user_id=<user_id>')
 def calculate_scores(user_id='all'):
-
+    """Calculates the ability scores for the given user or for all
+    
+    .. warning:: If run for all users, it takes a while
+    
+    Parameters
+    ----------
+    user_id : integer or string, (default='all')
+        Give the id of the user. If given 'all', runs for
+        each unique user in the database.
+    """
     user_ids_list = submissions.distinct('UserId') if user_id == 'all' else [user_id]
     for user_id in user_ids_list:
         user_subs = submissions.find({'UserId': int(user_id)}, {'_id':1, 'SubmitDateTime':1, 'ExerciseId':1, 'ResponseTime':1, 'Correct':1})
@@ -213,7 +247,6 @@ def calculate_scores(user_id='all'):
         calculated_ability_score = calc.calculate_scores(user_subs)
         for item in calculated_ability_score:
             submissions.update({'_id':item['_id']}, {'$set': {'AbilityScore':item['AbilityScore']}})
-
     return jsonify(message="Calculated Ability scores succesfully added.")
 
 @app.route('/insert', methods=['POST'])
@@ -221,7 +254,7 @@ def insert():
     """Accepts data in JSON format and saves it to the file.
 
     In order to use it, the data should be *POSTed*.
-    Data should be consist of list of dictionaries.
+    Data should consist of list of dictionaries.
     Usage example with Python requests library::
 
         import requests
@@ -243,6 +276,7 @@ def insert():
         return jsonify(error="Error during insertion to database")
     response_time_enrichment(user_id='all')
     calculate_scores(user_id='all')
+    upload_login_users()
     return jsonify(message="Data succesfully inserted and saved.")
 
 @app.route('/see_change')
@@ -250,4 +284,4 @@ def testing():
     return jsonify(message="this is working :)")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

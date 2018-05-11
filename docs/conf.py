@@ -20,8 +20,8 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'AppLabServer'
-copyright = '2018, AppLabGroup'
-author = 'AppLabGroup'
+copyright = '2018, AppLab Group2'
+author = 'AppLab Group2'
 
 # The short X.Y version
 version = ''
@@ -40,6 +40,7 @@ release = ''
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'numpydoc',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.autosummary',
@@ -78,7 +79,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'alabaster'#'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

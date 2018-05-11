@@ -1,152 +1,33 @@
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Welcome to AppLabServer’s documentation! &mdash; AppLabServer  documentation</title>
-  
-
-  
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-    <link rel="stylesheet" href="/static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="/static/pygments.css" type="text/css" />
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to AppLabServer’s documentation! &#8212; AppLabServer  documentation</title>
+    <link rel="stylesheet" href="/static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="/static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="/static/documentation_options.js"></script>
+    <script type="text/javascript" src="/static/jquery.js"></script>
+    <script type="text/javascript" src="/static/underscore.js"></script>
+    <script type="text/javascript" src="/static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
-
-  
-  <script src="/static/js/modernizr.min.js"></script>
-
-</head>
-
-<body class="wy-body-for-nav">
-
+    <link rel="search" title="Search" href="search.html" />
    
-  <div class="wy-grid-for-nav">
-
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="#" class="icon icon-home"> AppLabServer
-          
-
-          
-          </a>
-
-          
-            
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Welcome to AppLabServer’s documentation!</a><ul>
-<li><a class="reference internal" href="#module-group2api.app">app.py</a></li>
-<li><a class="reference internal" href="#module-group2api.utils.calculations">calculations.py</a></li>
-</ul>
-</li>
-</ul>
-</div>
-            
-          
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">AppLabServer</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="#">Docs</a> &raquo;</li>
-        
-      <li>Welcome to AppLabServer’s documentation!</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-            
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
+  <link rel="stylesheet" href="/static/custom.css" type="text/css" />
   
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
             
   <div class="section" id="welcome-to-applabserver-s-documentation">
 <h1>Welcome to AppLabServer’s documentation!<a class="headerlink" href="#welcome-to-applabserver-s-documentation" title="Permalink to this headline">¶</a></h1>
@@ -155,23 +36,55 @@
 <dl class="function">
 <dt id="group2api.app.calculate_scores">
 <code class="descclassname">group2api.app.</code><code class="descname">calculate_scores</code><span class="sig-paren">(</span><em>user_id='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.calculate_scores" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the ability scores for the given user or for all</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If run for all users, it takes a while</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string, (default=’all’)</span></dt>
+<dd><p class="first last">Give the id of the user. If given ‘all’, runs for
+each unique user in the database.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="group2api.app.get_exercises">
 <code class="descclassname">group2api.app.</code><code class="descname">get_exercises</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_exercises" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the list of exercises has been done by the user on a particlar learning objective</p>
 <p>Usage example : &lt;hostname&gt;/exercises/user_id=231412&amp;learning_obj_id=554363</p>
-<dl class="docutils">
-<dt>user_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd>Give the id of the user</dd>
-<dt>learning_obj_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd>Give the id of the learning objective</dd>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the user</p>
+</dd>
+<dt><strong>learning_obj_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the learning objective</p>
+</dd>
 </dl>
-<dl class="docutils">
-<dt>exercises <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
-<dd>The list of unique exercise ids has been done by the user</dd>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>exercises</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
+<dd><p class="first last">The list of unique exercise ids has been done by the user</p>
+</dd>
 </dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -179,10 +92,19 @@
 <code class="descclassname">group2api.app.</code><code class="descname">get_number_of_submissions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_number_of_submissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gives the total number of submissions</p>
 <p>Usage example : &lt;hostname&gt;/number_of_submissions</p>
-<dl class="docutils">
-<dt>number_of_submissions <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
-<dd>The list of user’s ids</dd>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>number_of_submissions</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
+<dd><p class="first last">The list of user’s ids</p>
+</dd>
 </dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -190,18 +112,32 @@
 <code class="descclassname">group2api.app.</code><code class="descname">get_scores</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em>, <em>exercise_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns ability score of the user on an exercise for a learning objective</p>
 <p>Usage example : &lt;hostname&gt;/scores/user_id=231412&amp;learning_obj_id=65745&amp;exercise_id=342342</p>
-<dl class="docutils">
-<dt>user_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd>Give the id of the user</dd>
-<dt>learning_obj_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd>Give the id of the learning objective</dd>
-<dt>exercise_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd>Give the id of the exercise</dd>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the user</p>
+</dd>
+<dt><strong>learning_obj_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the learning objective</p>
+</dd>
+<dt><strong>exercise_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the exercise</p>
+</dd>
 </dl>
-<dl class="docutils">
-<dt>scores <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
-<dd>The list of the ability scores achieved by the user</dd>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>scores</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
+<dd><p class="first last">The list of the ability scores achieved by the user</p>
+</dd>
 </dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -209,14 +145,26 @@
 <code class="descclassname">group2api.app.</code><code class="descname">get_user_info</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_user_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the list of activities belongs to a specific user</p>
 <p>Usage example : &lt;hostname&gt;/user/user_id=231412</p>
-<dl class="docutils">
-<dt>user_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd>Give the id of the user</dd>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the user</p>
+</dd>
 </dl>
-<dl class="docutils">
-<dt>user_info <span class="classifier-delimiter">:</span> <span class="classifier">list of dictionaries</span></dt>
-<dd>The list of user’s activities</dd>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>user_info</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of dictionaries</span></dt>
+<dd><p class="first last">The list of user’s activities</p>
+</dd>
 </dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -224,23 +172,81 @@
 <code class="descclassname">group2api.app.</code><code class="descname">get_user_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_user_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists the ids of the unique users</p>
 <p>Usage example : &lt;hostname&gt;/users</p>
-<dl class="docutils">
-<dt>users <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
-<dd>The list of user’s ids</dd>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>users</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
+<dd><p class="first last">The list of user ids</p>
+</dd>
 </dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_user_login_info">
+<code class="descclassname">group2api.app.</code><code class="descname">get_user_login_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_user_login_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists the userids, names and passwords</p>
+<p>Usage example : &lt;hostname&gt;/user_login_info</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>all_login_users</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of dictionaries</span></dt>
+<dd><p class="first last">The list of user login information</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_user_login_info_with_user">
+<code class="descclassname">group2api.app.</code><code class="descname">get_user_login_info_with_user</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_user_login_info_with_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the user id, name and password based on username</p>
+<p>Usage example : &lt;hostname&gt;/login_users/username=user15379</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>username</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Give user name of the user.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>login_user</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dictionary</span></dt>
+<dd><p class="first last">User login information</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="group2api.app.hello_world">
 <code class="descclassname">group2api.app.</code><code class="descname">hello_world</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.hello_world" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Display the home page</p>
+<p>Usage example : &lt;hostname&gt;/</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="group2api.app.insert">
 <code class="descclassname">group2api.app.</code><code class="descname">insert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.insert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Accepts data in JSON format and saves it to the file.</p>
 <p>In order to use it, the data should be <em>POSTed</em>.
-Data should be consist of list of dictionaries.
+Data should consist of list of dictionaries.
 Usage example with Python requests library:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;SubmitDateTime&quot;</span><span class="p">:</span><span class="s2">&quot;2012-12-21 12:12:12.120&quot;</span><span class="p">,</span>
@@ -260,19 +266,37 @@ Usage example with Python requests library:</p>
 <dd><p>Calculates and adds the response time for each submission</p>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
-<p class="last">Only get the data that doesn’t have any response time</p>
+<p class="last">Run only on the data that doesn’t have any response time</p>
 </div>
-<dl class="docutils">
-<dt>user_id <span class="classifier-delimiter">:</span> <span class="classifier">integer or string, (default=’all’)</span></dt>
-<dd>Give the id of the user. If given ‘all’, runs for
-each unique user in the database.</dd>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string, (default=’all’)</span></dt>
+<dd><p class="first last">Give the id of the user. If given ‘all’, runs for
+each unique user in the database.</p>
+</dd>
 </dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="group2api.app.serve_docs">
 <code class="descclassname">group2api.app.</code><code class="descname">serve_docs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.serve_docs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Display the documentations</p>
+<p>Usage example : &lt;hostname&gt;/docs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.upload_login_users">
+<code class="descclassname">group2api.app.</code><code class="descname">upload_login_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.upload_login_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates user information with default values</p>
+<p>Usage example : &lt;hostname&gt;/user_login_info</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-group2api.utils.calculations">
@@ -293,64 +317,63 @@ each unique user in the database.</dd>
 </div>
 
 
-           </div>
-           
           </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2018, AppLabGroup.
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to AppLabServer’s documentation!</a><ul>
+<li><a class="reference internal" href="#module-group2api.app">app.py</a></li>
+<li><a class="reference internal" href="#module-group2api.utils.calculations">calculations.py</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, AppLab Group2.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
 
-    </section>
+    
 
-  </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="/static/jquery.js"></script>
-      <script type="text/javascript" src="/static/underscore.js"></script>
-      <script type="text/javascript" src="/static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="/static/js/theme.js"></script>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          
-          SphinxRtdTheme.Navigation.enableSticky();
-          
-      });
-  </script> 
-
-</body>
+    
+  </body>
 </html>

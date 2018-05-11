@@ -11,7 +11,6 @@ app.py
 
 .. automodule:: group2api.app
    :members:
-   :undoc-members:
    :show-inheritance:
 
 calculations.py
@@ -19,5 +18,4 @@ calculations.py
 
 .. automodule:: group2api.utils.calculations
    :members:
-   :undoc-members:
    :show-inheritance:
