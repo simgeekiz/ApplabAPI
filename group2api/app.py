@@ -470,6 +470,9 @@ class DataHandler:
                 direction *= -1
                 current += direction * speed
             coords.append(round(current, 2))
+        max_val = coords[np.argmax(coords)]
+        if max_val > 0:
+            coords = [i/max_val for i in coords]
         return coords
 
 
