@@ -346,15 +346,15 @@ def insert():
     return jsonify(message="Data succesfully inserted and saved.")
 
 
-@app.route('/user_login', methods=['POST'])
+@app.route('/user_login', methods=['GET', 'POST'])
 def user_login():
-    """
-    Checks if the requested used_id is present in the submission list,
+    """Checks if the requested used_id is present in the submission list,
     and if the password matches the one set by the user.
     """
     import pandas as pd
-    received = request.data.decode('utf-8')
-    request('http://applab.ai.ru.nl:5000/check_connection')
+    # received = request.data.decode('utf-8')
+    # TODO delete this when post request works
+    received = '874250:1234'
     user_id, password = received.split(':')
     usr = "user" + user_id
 
