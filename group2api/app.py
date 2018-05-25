@@ -423,12 +423,12 @@ class DataHandler:
                  fname="C:/Users/HP/Documents/study - offline/resultaten-radboud-all_anoniem.xlsx",
                  db=None):
         submissions = db
-        self.dates = submissions.distinct('SubmitDateTime')
-        self.user_ids = submissions.distinct('UserId')
-        self.exercise_ids = submissions.distinct('ExerciseId')
-        self.learn_obj_ids = submissions.distinct('LearningObjectiveId')
-        self.corrects = submissions.distinct('Correct')
-        self.ability_scores = submissions.distinct('AbilityAfterAnswer')
+        self.dates = np.array(submissions.distinct('SubmitDateTime'))
+        self.user_ids = np.array(submissions.distinct('UserId'))
+        self.exercise_ids = np.array(submissions.distinct('ExerciseId'))
+        self.learn_obj_ids = np.array(submissions.distinct('LearningObjectiveId'))
+        self.corrects = np.array(submissions.distinct('Correct'))
+        self.ability_scores = np.array(submissions.distinct('AbilityAfterAnswer'))
         self.m2m = MomentByMoment(self.user_ids, self.corrects, self)
 
     def get_max_row(self, column=1):
