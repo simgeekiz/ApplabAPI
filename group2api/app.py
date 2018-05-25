@@ -282,23 +282,17 @@ def calculate_scores(user_id='all'):
     response : dictionary
         Contains a success message and a list of failed user ids.
     """
-<<<<<<< HEAD
     response = {
         "message": "Calculated Ability scores succesfully added.",
         "failed_ids": []
     }
     user_ids_list = submissions.distinct('UserId') if user_id == 'all' else [user_id]
-=======
-    user_ids_list = submissions.distinct('UserId') if user_id == 'all' else [
-        user_id]
->>>>>>> 37846d13e3a7b0a2dd4fc5345240cc3aa740e6b3
     for user_id in user_ids_list:
         user_subs = submissions.find({'UserId': int(user_id)},
                                      {'_id': 1, 'SubmitDateTime': 1,
                                       'ExerciseId': 1, 'ResponseTime': 1,
                                       'Correct': 1})
         user_subs = [sub for sub in user_subs]
-<<<<<<< HEAD
         try:
             calculated_ability_score = calc.calculate_scores(user_subs)
         except KeyError:
@@ -307,14 +301,6 @@ def calculate_scores(user_id='all'):
             for item in calculated_ability_score:
                 submissions.update({'_id':item['_id']}, {'$set': {'AbilityScore': item['AbilityScore']}})
     return jsonify(response)
-=======
-        calculated_ability_score = calc.calculate_scores(user_subs)
-        for item in calculated_ability_score:
-            submissions.update({'_id': item['_id']}, {
-                '$set': {'AbilityScore': item['AbilityScore']}})
-    return jsonify(message="Calculated Ability scores succesfully added.")
->>>>>>> 37846d13e3a7b0a2dd4fc5345240cc3aa740e6b3
-
 
 @app.route('/insert', methods=['POST'])
 def insert():
@@ -359,7 +345,7 @@ def insert():
         
     return jsonify(message="Data succesfully inserted and saved.")
 
-<<<<<<< HEAD
+
 @app.route('/user_login', methods=['POST'])
 def user_login():
     """
@@ -396,8 +382,6 @@ def user_login():
 @app.route('/check_connection/')
 def check():
     return "Hmm"
-=======
->>>>>>> 37846d13e3a7b0a2dd4fc5345240cc3aa740e6b3
 
 @app.route('/see_change')
 def testing():
