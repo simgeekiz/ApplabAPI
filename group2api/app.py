@@ -836,7 +836,7 @@ class ParameterExtractor:
                                     best_g, None)[3]
         return best_l0, best_t, best_g, best_s
 
-handler = None
+handler = DataHandler('', submissions)
 
 if __name__ == '__main__':
     handler = DataHandler('', submissions)
