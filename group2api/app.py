@@ -388,7 +388,7 @@ def testing():
     return jsonify(message="this really is working :)")
 
 
-#@app.route('/calculate_m2m_coordinates/user_id=<user_id>')
+@app.route('/calculate_m2m_coordinates/user_id=<user_id>')
 @app.route('/calculate_m2m_coordinates/user_id=<user_id>/date=<date>')
 def calculate_m2m_coordinates(user_id, date=None):
     """ Calculates coordinates that represent the learning of the
