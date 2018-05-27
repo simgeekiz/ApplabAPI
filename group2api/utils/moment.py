@@ -2,6 +2,7 @@ from openpyxl import load_workbook
 import numpy as np
 import datetime
 from copy import deepcopy
+import pandas as pd
 
 import os
 import sys
@@ -33,15 +34,14 @@ class MyEncoder(json.JSONEncoder):
 
 class DataHandler:
     def __init__(self,
-                 fname="C:/Users/HP/Documents/study - offline/resultaten-radboud-all_anoniem.xlsx",
-                 db=None):
-        submissions = db
-        self.dates = np.array(submissions.distinct('SubmitDateTime'))
-        self.user_ids = np.array(submissions.distinct('UserId'))
-        self.exercise_ids = np.array(submissions.distinct('ExerciseId'))
-        self.learn_obj_ids = np.array(submissions.distinct('LearningObjectiveId'))
-        self.corrects = np.array(submissions.distinct('Correct'))
-        self.ability_scores = np.array(submissions.distinct('AbilityAfterAnswer'))
+                 submissions=None):
+        df = pd.DataFrame(submissions)
+        self.dates = np.array(df['SubmitDateTime'])
+        self.user_ids = np.array(df['UserId'])
+        self.exercise_ids = np.array(df['ExerciseId'])
+        self.learn_obj_ids = np.array(df['LearningObjectiveId'])
+        self.corrects = np.array(df['Correct'])
+        self.ability_scores = np.array(df['AbilityAfterAnswer'])
         self.m2m = MomentByMoment(self.user_ids, self.corrects, self)
 
     def get_max_row(self, column=1):

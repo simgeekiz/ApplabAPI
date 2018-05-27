@@ -390,13 +390,15 @@ def calculate_m2m_coordinates(user_id, date=None):
     just the coordinates for that day
     :return: The coordinates for which the
     """
-    handler = mo.DataHandler('', submissions)
+    submissiondata = submissions.find({}, {'_id': 0})
+    sub = [u for u in submissiondata]
+    handler = mo.DataHandler(sub)
     if date is None:
         coords = handler.get_coordinates_for_today(int(user_id))
     else:
         date = mo.get_date_from_str(date)
         coords = handler.get_coordinates_for_today(int(user_id), date_id=date)
-    return json.dumps(coords, cls=MyEncoder)
+    return json.dumps(coords, cls=mo.MyEncoder)
 
 if __name__ == '__main__':
     app.run()
