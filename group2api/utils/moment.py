@@ -12,12 +12,21 @@ sys.path.append('..')
 
 # helper function
 def get_date_from_str(yyyymmdd):
-    """ Return a datetime representation of the date
-    :param yyyymmdd: str in format yyyy-mm-dd. division symbols can differ
+    """Return a datetime representation of the date
+    
+    Parameters
+    ----------
+    yyyymmdd : string,
+        Date string in format yyyy-mm-dd. Division symbols can differ
+        
+    Returns
+    -------
+    date : datetime,
+        A datetime representation of the date
     """
     split_token = yyyymmdd[4]
     year, month, day = [int(s) for s in yyyymmdd.split(split_token)]
-    print("{}:{}:{}".format(year, month, day))
+    #print("{}:{}:{}".format(year, month, day))
     return datetime.datetime(year, month, day, 0, 0, 0, 0)
 
 class MyEncoder(json.JSONEncoder):
@@ -32,9 +41,9 @@ class MyEncoder(json.JSONEncoder):
             return super(MyEncoder, self).default(obj)
 
 
-class DataHandler:
-    def __init__(self,
-                 submissions=None):
+class DataHandler():
+    
+    def __init__(self, submissions=None):
         df = pd.DataFrame(submissions)
         self.dates = np.array(df['SubmitDateTime'])
         self.user_ids = np.array(df['UserId'])
@@ -43,6 +52,8 @@ class DataHandler:
         self.corrects = np.array(df['Correct'])
         self.ability_scores = np.array(df['AbilityAfterAnswer'])
         self.m2m = MomentByMoment(self.user_ids, self.corrects, self)
+        # release memory
+        del df
 
     def get_max_row(self, column=1):
         val = self.ws.cell(row=1, column=column).value
@@ -133,7 +144,7 @@ class DataHandler:
 
     def from_p_j_to_coord(self, p_j):
         summed_array = np.cumsum(p_j)[::-1]
-        print(summed_array)
+        #print(summed_array)
         direction = 1
         coords = []
         current = 0
@@ -150,7 +161,8 @@ class DataHandler:
         return coords
 
 
-class MomentByMoment:
+class MomentByMoment():
+
     def __init__(self, user_ids, corrects, handler: DataHandler):
         self.p_l0 = 0.064
         self.p_T = 0.095
@@ -305,7 +317,7 @@ class MomentByMoment:
         # print('finding pre-test')
         bound = 0
         e = excs[0]
-        print(e)
+        #print(e)
         while e in self.handler.pre_ids:
             bound += 1
             e = excs[bound]
@@ -360,7 +372,8 @@ class MomentByMoment:
         return (bounds, colors)
 
 
-class ParameterExtractor:
+class ParameterExtractor():
+
     def __init__(self):
         # params = [L0, T, G, S]
         self.params_min = [1e-15 for i in range(4)]
@@ -432,7 +445,7 @@ class ParameterExtractor:
         best_s = \
         self.brute_force_params(answers, same, grain, 0.0, 0.0, 0.0, None)[3]
         for i in range(iterations):
-            print("best is {}".format([best_l0, best_t, best_g, best_s]))
+            # print("best is {}".format([best_l0, best_t, best_g, best_s]))
             best_l0 = \
             self.brute_force_params(answers, same, grain, None, best_t, best_g,
                                     best_s)[0]

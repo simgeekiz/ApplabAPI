@@ -1,18 +1,13 @@
-import numpy as np
-import datetime
-from copy import deepcopy
-
 from flask import Flask, request, jsonify, render_template, send_from_directory
 
 app = Flask(__name__)
 
 import os
 import sys
-
 sys.path.append('..')
+from datetime import datetime, timedelta
 import json
 from pymongo import MongoClient
-import pymongo
 
 try:
     from .utils import calculations as calc
@@ -33,6 +28,15 @@ db = client[os.environ['MONGO_DBNAME']]
 
 submissions = db['submissions']
 users = db['users']
+#coordinates = db['coordinates']
+
+@app.route('/check_connection/')
+def check():
+    return "Hmm"
+
+@app.route('/see_change')
+def testing():
+    return jsonify(message="This really is working :)")
 
 @app.route('/')
 def hello_world():
@@ -110,12 +114,92 @@ def get_user_login_info_with_user(username):
 
     Returns
     -------
-    login_user : dictionary
+    login_user : list
         User login information
     """
     login_user_info = users.find({'UserName': username}, {'_id': 0})
     login_user = [u for u in login_user_info]
     return jsonify(login_user)
+
+@app.route('/get_data/date=<date>')
+def get_data_by_date(date):
+    """Get the list of data for one specific submission date
+
+    Usage example : <hostname>/get_data/date=2017-11-28
+    
+    Parameters
+    ----------
+    date : string
+        Give the date string in YYYY-DD-MM format.
+
+    Returns
+    -------
+    data : list
+        Returns list of instances belongs to the date
+    """
+    data = submissions.find({'SubmitDateTime': {'$regex': '^' + date + '.*'}}, {'_id': 0})
+    data = [d for d in data]
+    return jsonify(data)
+
+@app.route('/get_data/day=<day_number>')
+def get_data_by_day_number(day_number):
+    """Get the list of data for one specific submission date
+
+    Usage example : <hostname>/get_data/day=1
+    
+    Parameters
+    ----------
+    day_number : int
+        Give the date number like 1, 2, 3.
+
+    Returns
+    -------
+    data : list
+        Returns list of instances belongs to one day
+    """
+    data = submissions.find({'Days': int(day_number)}, {'_id': 0})
+    data = [d for d in data]
+    return jsonify(data)
+
+@app.route('/scores/day=<day_number>&user_id=<user_id>&learning_obj_id=<learning_obj_id>')
+def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
+    """Returns ability score of the user accordind to learning obj id
+
+    Usage example : <hostname>/scores/day=1§user_id=231412&learning_obj_id=65745
+    
+    Parameters
+    ----------
+    
+    day_number : int 
+        Give the date number like 1, 2, 3
+        
+    user_id : integer or string
+        Give the id of the user
+
+    learning_obj_id : integer or string
+        Give the id of the learning objective
+
+    Returns
+    -------
+    scores : an integer
+        The ability score achieved by the user
+    """
+    scores = submissions.find(
+        {'Days': int(day_number),
+         'UserId': int(user_id),
+         'LearningObjectiveId': int(learning_obj_id)},
+        {'_id': 0, 'AbilityAfterAnswer': 1, 'SubmitDateTime': 1})
+    
+    datetime_list = []
+    data = [d for d in scores]
+    
+    for i in data:
+        datetime_list.append(datetime.strptime(i['SubmitDateTime'], '%Y-%m-%d %H:%M:%S.%f'))
+    index = datetime_list.index(max(datetime_list))
+    while (data[index]['AbilityAfterAnswer'] == None):
+        datetime_list.pop(index)
+        index = datetime_list.index(max(datetime_list))
+    return jsonify(data[index]['AbilityAfterAnswer'])
 
 
 @app.route('/upload_login_users')
@@ -194,7 +278,7 @@ def get_exercises(user_id, learning_obj_id):
 
 @app.route(
     '/scores/user_id=<user_id>&learning_obj_id=<learning_obj_id>&exercise_id=<exercise_id>')
-def get_scores(user_id, learning_obj_id, exercise_id):
+def get_ability_scores(user_id, learning_obj_id, exercise_id):
     """Returns ability score of the user on an exercise for a learning objective
 
     Usage example : <hostname>/scores/user_id=231412&learning_obj_id=65745&exercise_id=342342
@@ -230,7 +314,7 @@ def get_scores(user_id, learning_obj_id, exercise_id):
             scores_list.append(int(score))
 
     return jsonify(scores_list)
-
+ 
 
 @app.route('/response_time_enrichment/user_id=<user_id>')
 def response_time_enrichment(user_id='all'):
@@ -294,6 +378,36 @@ def calculate_scores(user_id='all'):
                 submissions.update({'_id':item['_id']}, {'$set': {'AbilityScore': item['AbilityScore']}})
     return jsonify(response)
 
+@app.route('/add_days/start=<start_date>&end=<end_date>')
+def add_days(start_date, end_date):
+    """Adds the days information to the instances based on given interval
+
+    Usage example : <hostname>/add_days/start=2017-11-28&end=2017-12-04
+    
+    Parameters
+    ----------
+    start_date : string
+        Give the starting date as string in YYYY-DD-MM format.
+        
+    end_date : string
+        Give the ending date as string in YYYY-DD-MM format.
+    """
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    
+    date_list = [((start_date + timedelta(n)).strftime('%Y-%m-%d'), n+1)
+                 for n in range(int((end_date - start_date).days)+1)]
+    
+    submissions.update({}, {'$unset': {'Days': 1}}, multi=True)
+
+    for date, days in date_list:
+        submissions.update({'SubmitDateTime': {'$regex': '^' + date + '.*'}}, 
+                           {'$set': {'Days': days}}, 
+                           multi=True)
+    
+    return jsonify(message="Days added.")
+
+
 @app.route('/insert', methods=['POST'])
 def insert():
     """Accepts data in JSON format and saves it to the file.
@@ -325,10 +439,10 @@ def insert():
     except:
         return jsonify(error="Error during response time enrichment")
     
-    try:
-        calculate_scores(user_id='all')
-    except: 
-        return jsonify(error="Error during calculate scores")
+   # try:
+  #      calculate_scores(user_id='all')
+  #  except: 
+   #     return jsonify(error="Error during calculate scores")
     
     try:
         upload_login_users()
@@ -371,24 +485,21 @@ def user_login():
             f.write("failed")
         return "Error"
 
-@app.route('/check_connection/')
-def check():
-    return "Hmm"
-
-@app.route('/see_change')
-def testing():
-    return jsonify(message="this really is working :)")
-
-
 @app.route('/calculate_m2m_coordinates/user_id=<user_id>')
 @app.route('/calculate_m2m_coordinates/user_id=<user_id>/date=<date>')
 def calculate_m2m_coordinates(user_id, date=None):
-    """ Calculates coordinates that represent the learning of the
-    moment-by-moment peaks.
-    :param user_id: The user for which the coordinates are calculated
-    :param date: optional, pass in yyyy-mm-dd format. Will result in getting
-    just the coordinates for that day
-    :return: The coordinates for which the
+    """Calculates coordinates that represent the learning of the moment-by-moment peaks.
+    
+    Parameters
+    ----------
+    user_id : The user for which the coordinates are calculated
+    
+    date : string, optional (default=None)
+        pass in yyyy-mm-dd format. Will result in getting just the coordinates for that day
+    
+    Returns
+    -------
+    coords : The coordinates for which the
     """
     submissiondata = submissions.find({}, {'_id': 0})
     sub = [u for u in submissiondata]
