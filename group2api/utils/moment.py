@@ -115,14 +115,16 @@ class DataHandler():
         post = list(self.get_column(5, 3))
         return (pre, cin, cex, aex, raex, post)
 
-    def get_coordinates_for_today(self, user_id=0,
+    def get_coordinates_for_today(self, user_id=0, loid=0,
                                   date_id=None):
         # todo: change from answers to coordinates
         if date_id is None:
-            answers = self.corrects[np.where(self.user_ids == user_id)]
+            answers = self.corrects[np.where((self.user_ids == user_id)& 
+                                             (self.learn_obj_ids == loid)]
         else:
             answers = self.corrects[np.where((self.user_ids == user_id) &
-                                             (self.dates == date_id))]
+                                             (self.dates == date_id) &
+                                             (self.learn_obj_ids == loid))]
         same = list(np.ones(len(answers)))
         try:
             same[0] = 0
