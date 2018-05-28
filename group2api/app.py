@@ -485,14 +485,16 @@ def user_login():
             f.write("failed")
         return "Error"
 
-@app.route('/calculate_m2m_coordinates/user_id=<user_id>')
-@app.route('/calculate_m2m_coordinates/user_id=<user_id>/date=<date>')
-def calculate_m2m_coordinates(user_id, date=None):
+@app.route('/calculate_m2m_coordinates/user_id=<user_id>/loid=<loid>')
+@app.route('/calculate_m2m_coordinates/user_id=<user_id>/loid=<loid>/date=<date>')
+def calculate_m2m_coordinates(user_id, loid, date=None):
     """Calculates coordinates that represent the learning of the moment-by-moment peaks.
     
     Parameters
     ----------
     user_id : The user for which the coordinates are calculated
+    
+    loid : The ID of the learning objective for which the coordinates are calculated
     
     date : string, optional (default=None)
         pass in yyyy-mm-dd format. Will result in getting just the coordinates for that day
@@ -505,10 +507,10 @@ def calculate_m2m_coordinates(user_id, date=None):
     sub = [u for u in submissiondata]
     handler = mo.DataHandler(sub)
     if date is None:
-        coords = handler.get_coordinates_for_today(int(user_id))
+        coords = handler.get_coordinates_for_today(int(user_id), int(loid))
     else:
         date = mo.get_date_from_str(date)
-        coords = handler.get_coordinates_for_today(int(user_id), date_id=date)
+        coords = handler.get_coordinates_for_today(int(user_id), int(loid), date_id=date)
     return json.dumps(coords, cls=mo.MyEncoder)
 
 if __name__ == '__main__':
