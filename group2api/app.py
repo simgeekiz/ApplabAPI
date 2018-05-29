@@ -100,6 +100,11 @@ def get_user_login_info():
     all_login_users = [u for u in loginusers]
     return jsonify(all_login_users)
 
+@app.route('/showdays')
+def show_days():
+    days = submissions.find({}, {'_id' : 0, 'Days':1, 'UserId':1, 'LearningObjectiveId':1})
+    return jsonify([d for d in days])
+
 
 @app.route('/login_users/username=<username>')
 def get_user_login_info_with_user(username):
@@ -195,7 +200,10 @@ def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
     
     for i in data:
         datetime_list.append(datetime.strptime(i['SubmitDateTime'], '%Y-%m-%d %H:%M:%S.%f'))
-    index = datetime_list.index(max(datetime_list))
+    try:
+        index = datetime_list.index(max(datetime_list))
+    except Exception:
+        return jsonify(0)
     while (data[index]['AbilityAfterAnswer'] == None):
         datetime_list.pop(index)
         index = datetime_list.index(max(datetime_list))
@@ -452,38 +460,29 @@ def insert():
     return jsonify(message="Data succesfully inserted and saved.")
 
 
-@app.route('/user_login', methods=['GET', 'POST'])
-def user_login():
+@app.route('/user_login/usr=<user_id>&psw=<password>', methods=['GET'])
+def user_login(user_id, password):
     """Checks if the requested used_id is present in the submission list,
     and if the password matches the one set by the user.
     """
     import pandas as pd
-    # received = request.data.decode('utf-8')
-    # TODO delete this when post request works
-    received = '874250:1234'
-    user_id, password = received.split(':')
-    usr = "user" + user_id
 
+    usr = "user" + user_id
     data_pd = pd.DataFrame(list(users.find()))
     
-    try:
-        with open('received.txt', 'w') as f:
-            f.write(received)
-            
+    try:            
         unames = data_pd['UserName'].tolist()
         if user_id == None or usr not in unames:
-            return "Wrong username"
+            return jsonify([{'message' : "Wrong username"}])
 
         elif usr in unames:
             ind = unames.index(usr)
             if password == str(data_pd["Password"][ind]):
-                return "Correct"
+                return jsonify([{'message' : "Correct Login"}])
             else:
-                return "Wrong password"
+                return jsonify([{'message' : "Wrong password"}])
     except:
-        with open('received.txt', 'a') as f:
-            f.write("failed")
-        return "Error"
+        return jsonify([{'message' : "Error"}])
 
 @app.route('/calculate_m2m_coordinates/user_id=<user_id>/loid=<loid>')
 @app.route('/calculate_m2m_coordinates/user_id=<user_id>/loid=<loid>/date=<date>')

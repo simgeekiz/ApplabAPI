@@ -120,7 +120,7 @@ class DataHandler():
         # todo: change from answers to coordinates
         if date_id is None:
             answers = self.corrects[np.where((self.user_ids == user_id)& 
-                                             (self.learn_obj_ids == loid)]
+                                             (self.learn_obj_ids == loid))]
         else:
             answers = self.corrects[np.where((self.user_ids == user_id) &
                                              (self.dates == date_id) &
