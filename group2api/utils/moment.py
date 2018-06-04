@@ -56,7 +56,7 @@ class DataHandler():
         self.ability_scores = np.array(df['AbilityAfterAnswer'])
         self.m2m = MomentByMoment(self.user_ids, self.corrects, self)
         # release memory
-        self.avg_ltgs = [[0.5, 0.1, 0.299, 0.1],
+        self.avg_ltgs = [[0.999, 0.125, 0.299, 0.099],
                         [0.5, 0.1, 0.299, 0.1],
                         [0.5, 0.1, 0.299, 0.1],
                         [0.5, 0.1, 0.299, 0.1],
@@ -494,4 +494,5 @@ class ParameterExtractor():
             best_s = \
             self.brute_force_params(answers, same, grain, best_l0, best_t,
                                     best_g, None)[3]
+            print(best_l0, best_t, best_g, best_s)
         return best_l0, best_t, best_g, best_s
