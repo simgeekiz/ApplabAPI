@@ -122,9 +122,22 @@ class DataHandler():
             answers = self.corrects[np.where((self.user_ids == user_id)& 
                                              (self.learn_obj_ids == loid))]
         else:
+            datelist = []
+            for sdt in self.dates:
+                try:
+                    datelist.append(datetime.datetime.strptime(sdt, "%Y-%m-%d %H:%M:%S.%f").replace(hour=0, minute=0, second=0, microsecond=0))
+                except ValueError:
+                    datelist.append(datetime.datetime.strptime(sdt, "%Y-%m-%d %H:%M:%S").replace(hour=0, minute=0, second=0, microsecond=0))
+                except TypeError:
+                    datelist.append(None)
+            datelist = np.array(datelist)
             answers = self.corrects[np.where((self.user_ids == user_id) &
-                                             (self.dates == date_id) &
+                                             (datelist == date_id) & 
+                                             # date_id is 2017-11-28 but self dates= 2017-11-28 09:49:11.913
                                              (self.learn_obj_ids == loid))]
+            #if (datelist == date_id):
+             #   print("entered id")
+            print("date_id",type(date_id), type(datelist[0]), date_id==datelist[0])       
         same = list(np.ones(len(answers)))
         try:
             same[0] = 0
@@ -157,7 +170,10 @@ class DataHandler():
                 direction *= -1
                 current += direction * speed
             coords.append(round(current, 2))
-        max_val = coords[np.argmax(coords)]
+        try:
+            max_val = coords[np.argmax(coords)]
+        except Exception as e:
+            return [0.0]
         if max_val > 0:
             coords = [i/max_val for i in coords]
         return coords

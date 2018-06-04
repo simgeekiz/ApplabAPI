@@ -1,13 +1,17 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
-
-app = Flask(__name__)
-
+from flask import Flask, request, Response, jsonify, render_template, send_from_directory
 import os
 import sys
+import re
 sys.path.append('..')
 from datetime import datetime, timedelta
 import json
 from pymongo import MongoClient
+from functools import wraps
+from flask_bootstrap import Bootstrap
+import hashlib, base64
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 try:
     from .utils import calculations as calc
@@ -19,6 +23,10 @@ try:
 except ImportError:
     from utils import moment as mo
 
+app = Flask(__name__)
+#Bootstrap(app)
+app.secret_key = "super secret key"
+
 # Connect to mongoLab
 client = MongoClient(os.environ['MONGO_HOST'], int(os.environ['MONGO_PORT']))
 db = client[os.environ['MONGO_DBNAME']]
@@ -28,7 +36,8 @@ db = client[os.environ['MONGO_DBNAME']]
 
 submissions = db['submissions']
 users = db['users']
-#coordinates = db['coordinates']
+coordinates = db['coordinates']
+flag_coordinates = db['flag_coordinates']
 
 @app.route('/check_connection/')
 def check():
@@ -38,14 +47,36 @@ def check():
 def testing():
     return jsonify(message="This really is working :)")
 
-@app.route('/')
-def hello_world():
+#@app.route('/')
+#def hello_world():
     """Display the home page
 
     Usage example : <hostname>/
     """
-    return 'For documentation see /docs'
+ #   return 'For documentation see /docs'
 
+    
+@app.route('/')
+def home():
+    return "For documentation see /docs"
+
+
+def authenticate():
+    """Sends a 401 response that enables basic auth"""
+    return Response(
+    'Could not verify your access level for that URL.\n'
+    'You have to login with proper credentials', 401,
+    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+       # print(auth)
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
 
 @app.route('/docs')
 def serve_docs():
@@ -57,6 +88,7 @@ def serve_docs():
 
 
 @app.route('/number_of_submissions')
+@requires_auth
 def get_number_of_submissions():
     """Gives the total number of submissions
 
@@ -71,6 +103,7 @@ def get_number_of_submissions():
 
 
 @app.route('/users')
+@requires_auth
 def get_user_list():
     """Lists the ids of the unique users
 
@@ -86,6 +119,7 @@ def get_user_list():
 
 
 @app.route('/login_users')
+@requires_auth
 def get_user_login_info():
     """Lists the userids, names and passwords
 
@@ -101,12 +135,14 @@ def get_user_login_info():
     return jsonify(all_login_users)
 
 @app.route('/showdays')
+@requires_auth
 def show_days():
     days = submissions.find({}, {'_id' : 0, 'Days':1, 'UserId':1, 'LearningObjectiveId':1})
     return jsonify([d for d in days])
 
 
 @app.route('/login_users/username=<username>')
+@requires_auth
 def get_user_login_info_with_user(username):
     """Get the user id, name and password based on username
 
@@ -127,6 +163,7 @@ def get_user_login_info_with_user(username):
     return jsonify(login_user)
 
 @app.route('/get_data/date=<date>')
+@requires_auth
 def get_data_by_date(date):
     """Get the list of data for one specific submission date
 
@@ -147,6 +184,7 @@ def get_data_by_date(date):
     return jsonify(data)
 
 @app.route('/get_data/day=<day_number>')
+@requires_auth
 def get_data_by_day_number(day_number):
     """Get the list of data for one specific submission date
 
@@ -167,6 +205,7 @@ def get_data_by_day_number(day_number):
     return jsonify(data)
 
 @app.route('/scores/day=<day_number>&user_id=<user_id>&learning_obj_id=<learning_obj_id>')
+@requires_auth
 def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
     """Returns ability score of the user accordind to learning obj id
 
@@ -203,33 +242,58 @@ def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
     try:
         index = datetime_list.index(max(datetime_list))
     except Exception:
-        return jsonify(0)
+        return jsonify([0])
     while (data[index]['AbilityAfterAnswer'] == None):
         datetime_list.pop(index)
         index = datetime_list.index(max(datetime_list))
-    return jsonify(data[index]['AbilityAfterAnswer'])
+    return jsonify([data[index]['AbilityAfterAnswer']])
 
 
 @app.route('/upload_login_users')
+@requires_auth
 def upload_login_users():
     """Generates user information with default values
 
     Usage example : <hostname>/user_login_info
     """
-    submissions_user_ids = submissions.distinct('UserId')
-    users_user_ids = users.distinct('UserId')
-    user_ids = [uid for uid in submissions_user_ids if
-                uid not in users_user_ids]
-    for uid in user_ids:
+  #  submissions_user_ids = submissions.distinct('UserId')
+  #  users_user_ids = users.distinct('UserId')
+  #  user_ids = [uid for uid in submissions_user_ids if
+   #             uid not in users_user_ids]
+    import pandas as pd
+    filePathUser = "../../applab_data/deventerusers.csv"
+    dfuser = pd.read_csv(filePathUser, sep=',')
+    for i,row in dfuser.iterrows():
+    #print(row['UserName'], row['UserId'])
         user_info = {}
-        user_info['UserId'] = uid
-        user_info['UserName'] = 'user{}'.format(str(uid))
-        user_info['Password'] = 1234
+        user_info['UserId'] = row['UserId']
+        user_info['UserName'] = str(row['UserName'])
+        user_info['Password'] = str(row['UserName']) + '!' 
         users.insert(user_info)
+   # for uid in user_ids:
+       # hashed_password = generate_password_hash(str(uid) + "!", method='sha256')
+    #    user_info = {}
+    #    user_info['UserId'] = uid
+    #    user_info['UserName'] = 'user{}'.format(str(uid))
+    #    user_info['Password'] = "1234" #hashed_password 
+    #    users.insert(user_info)
     return jsonify(message="Users generated")
 
+@app.route('/upload_auth_user')
+@requires_auth
+def upload_auth_user():
+    """
+    Usage example : <hostname>/upload_auth_user
+    """
+    user_info = {}
+    user_info['UserId'] = "Group2"
+    user_info['UserName'] = "Group2"
+    user_info['Password'] = "Group2-1234" 
+    users.insert(user_info)
+    return jsonify(message="User for auth is generated")
 
 @app.route('/user/user_id=<user_id>')
+@requires_auth
 def get_user_info(user_id):
     """Returns the list of activities belongs to a specific user
 
@@ -253,6 +317,7 @@ def get_user_info(user_id):
 
 
 @app.route('/exercises/user_id=<user_id>&learning_obj_id=<learning_obj_id>')
+@requires_auth
 def get_exercises(user_id, learning_obj_id):
     """Returns the list of exercises has been done by the user on a particlar learning objective
 
@@ -286,6 +351,7 @@ def get_exercises(user_id, learning_obj_id):
 
 @app.route(
     '/scores/user_id=<user_id>&learning_obj_id=<learning_obj_id>&exercise_id=<exercise_id>')
+@requires_auth
 def get_ability_scores(user_id, learning_obj_id, exercise_id):
     """Returns ability score of the user on an exercise for a learning objective
 
@@ -325,6 +391,7 @@ def get_ability_scores(user_id, learning_obj_id, exercise_id):
  
 
 @app.route('/response_time_enrichment/user_id=<user_id>')
+@requires_auth
 def response_time_enrichment(user_id='all'):
     """Calculates and adds the response time for each submission
 
@@ -350,6 +417,7 @@ def response_time_enrichment(user_id='all'):
 
 
 @app.route('/calculate_scores/user_id=<user_id>')
+@requires_auth
 def calculate_scores(user_id='all'):
     """Calculates the ability scores for the given user or for all
     
@@ -387,6 +455,7 @@ def calculate_scores(user_id='all'):
     return jsonify(response)
 
 @app.route('/add_days/start=<start_date>&end=<end_date>')
+@requires_auth
 def add_days(start_date, end_date):
     """Adds the days information to the instances based on given interval
 
@@ -417,6 +486,7 @@ def add_days(start_date, end_date):
 
 
 @app.route('/insert', methods=['POST'])
+@requires_auth
 def insert():
     """Accepts data in JSON format and saves it to the file.
 
@@ -458,34 +528,58 @@ def insert():
         return jsonify(error="Error during uploading users to database")
         
     return jsonify(message="Data succesfully inserted and saved.")
+    
+def check_match(mystr, comp):
+    def pad(s):
+        if len(s) % 4 != 0:
+            s += '=' * (4 - (len(s) % 4))
+        return s
 
+    mystr = pad(mystr)
+    mystr = mystr.encode('ascii')
 
-@app.route('/user_login/usr=<user_id>&psw=<password>', methods=['GET'])
-def user_login(user_id, password):
+    comp = pad(str(comp)).encode("ascii")
+    m = hashlib.sha256()
+    m.update(comp)
+    d = m.digest()
+    d = base64.urlsafe_b64encode(d)
+    if d == mystr:
+        return True
+    return False   
+
+def check_auth(username, password):
+    """This function is called to check if a username /
+    password combination is valid.
+    """
+    loggedin_user = users.find({'UserName': str(username), 'Password': str(password)})
+    if [u for u in loggedin_user]:
+        return True
+    else: 
+        return False
+    
+@app.route('/user_login/user=<user_name>&password=<password>', methods=['GET', 'POST'])
+@requires_auth
+def user_login(user_name, password):
     """Checks if the requested used_id is present in the submission list,
     and if the password matches the one set by the user.
     """
-    import pandas as pd
 
-    usr = "user" + user_id
-    data_pd = pd.DataFrame(list(users.find()))
+    us = users.find({'UserName':str(user_name)},
+                    {'_id': 1, 'UserId': 1, 'Password': 1})
+    usl = [u for u in us]
+    if len(usl) == 0:
+        return jsonify([{'message' : "Login Failed"}])
     
-    try:            
-        unames = data_pd['UserName'].tolist()
-        if user_id == None or usr not in unames:
-            return jsonify([{'message' : "Wrong username"}])
+    if check_match(password, str(usl[0]['Password'])):
+        return jsonify([{'message' : "Login Correct", "User_ID" : usl[0]['UserId']}])
+    else:
+        return jsonify([{'message' : "Login Failed"}])
 
-        elif usr in unames:
-            ind = unames.index(usr)
-            if password == str(data_pd["Password"][ind]):
-                return jsonify([{'message' : "Correct Login"}])
-            else:
-                return jsonify([{'message' : "Wrong password"}])
-    except:
-        return jsonify([{'message' : "Error"}])
+
 
 @app.route('/calculate_m2m_coordinates/user_id=<user_id>/loid=<loid>')
 @app.route('/calculate_m2m_coordinates/user_id=<user_id>/loid=<loid>/date=<date>')
+@requires_auth
 def calculate_m2m_coordinates(user_id, loid, date=None):
     """Calculates coordinates that represent the learning of the moment-by-moment peaks.
     
@@ -512,5 +606,152 @@ def calculate_m2m_coordinates(user_id, loid, date=None):
         coords = handler.get_coordinates_for_today(int(user_id), int(loid), date_id=date)
     return json.dumps(coords, cls=mo.MyEncoder)
 
+@app.route('/fast_m2m/user_id=<user_id>/loid=<loid>')
+@app.route('/fast_m2m/user_id=<user_id>/loid=<loid>/day=<day>')
+@requires_auth
+def fast_m2m(user_id, loid, day=None):
+    try:
+        if day is None:
+            day = 1
+        answers = submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})
+        answers = [a for a in answers]
+        return jsonify(answers)
+    except Exception as e:
+        return jsonify(message="Something went wrong {}".format(e))
+
+@app.route('/flag_positions')
+@requires_auth
+def flag_positions():
+    """Generates a table for positon of flags
+    
+    Usage example : <hostname>/flag_positions
+    """
+    users_user_ids = users.distinct('UserId')
+    coordinates_user_ids = coordinates.distinct('UserId')
+    user_ids = [uid for uid in users_user_ids if
+                uid not in coordinates_user_ids]
+    for uid in user_ids:
+        user_info = {}
+        user_info['UserId'] = uid
+        user_info['Flag1'] = -1
+        user_info['Flag2'] = -1
+        user_info['Flag3'] = -1
+        user_info['Flag4'] = -1
+        user_info['Flag5'] = -1
+        user_info['Flag6'] = -1
+        coordinates.insert(user_info)
+    return jsonify(message="coordinates collection generated")
+
+@app.route('/list_flag_positions')
+@requires_auth
+def list_flag_positions():
+    """lists the flags position table
+    Usage example : <hostname>/list_flag_positions
+    """
+    flagpos = coordinates.find({}, {'_id': 0})
+    all_user_flags = [u for u in flagpos]
+    return jsonify(all_user_flags)
+
+@app.route('/save_flag_position/user_id=<user_id>&flag=<flag_number>&flag_coord=<flag_coord>')
+@requires_auth
+def save_flag_position(user_id, flag_number, flag_coord):
+    """saves the flag position that is specific to user to flags position table
+    Usage example : <hostname>/save_flag_position/user_id=2345&flag=Flag1&flag_coord=5
+    """
+    
+    if re.match(r'^Flag\d+', flag_number):
+        coordinates.update({'UserId': int(user_id)}, {'$set': {flag_number: int(flag_coord)}})
+        return jsonify(message="Flag position succesfully saved")
+    else:
+        return jsonify(error="Flag key is not in the correct format. It should match ^Flag\d+")
+
+@app.route('/get_flag_position/user_id=<user_id>&flag=<flag_number>')
+@requires_auth
+def get_flag_position(user_id, flag_number):
+    """...
+    Usage example : <hostname>/get_flag_position/user_id=2345&flag=Flag1
+    """    
+        
+    flag_position = coordinates.find(
+        {'UserId': int(user_id)},
+        {'_id': 0, flag_number: 1})
+
+    flag_position = [f for f in flag_position]
+    
+    return jsonify(flag_position)
+
+##### New Flag position operations
+
+@app.route('/save_flag_position2/user_id=<user_id>&loid=<loid>&flag=<flag_number>&flag_coord=<flag_coord>')
+@requires_auth
+def save_flag_position2(user_id, loid, flag_number, flag_coord):
+    """Saves the flag position that is specific to user and for the given learning objective to flags position table
+    
+    Parameters
+    ----------
+    user_id : ...
+    """
+    if re.match(r'^Flag\d+', flag_number):
+        
+        flag_coordinates.update({'UserId': int(user_id), 
+                                 'LearningObjectiveId': int(loid)}, 
+                                {'$set': {flag_number: int(flag_coord)}},
+                                upsert=True)
+        
+        return jsonify(message="Flag position succesfully saved")
+    else:
+        return jsonify(error="Flag key is not in the correct format. It should match with regex ^Flag\d+")
+
+@app.route('/get_flag_position2/user_id=<user_id>&loid=<loid>')
+@app.route('/get_flag_position2/user_id=<user_id>&loid=<loid>&flag=<flag_number>')
+@requires_auth
+def get_flag_position2(user_id, loid, flag_number='all'):
+    """...
+    Usage example : <hostname>/get_flag_position/user_id=2345&loid=8052&flag=Flag1
+    """    
+    if flag_number == 'all':
+        flag_positions = flag_coordinates.find(
+            {'UserId': int(user_id),
+             'LearningObjectiveId': int(loid)},
+            {'_id': 0})
+    elif re.match(r'^Flag\d+', flag_number):
+        flag_positions = flag_coordinates.find(
+            {'UserId': int(user_id),
+             'LearningObjectiveId': int(loid)},
+            {'_id': 0, flag_number:1})
+    else:
+        return jsonify(error="Flag key is not in the correct format. It should match with regex ^Flag\d+")
+
+    flag_positions = [f for f in flag_positions]
+    return jsonify(flag_positions)
+    
+@app.route('/list_flag_positions2')
+@requires_auth
+def list_flag_positions2():
+    """Lists the flags position table
+    
+    Usage example : <hostname>/list_flag_positions2
+    """
+    flagpos = flag_coordinates.find({}, {'_id': 0})
+    all_user_flags = [u for u in flagpos]
+    return jsonify(all_user_flags)
+
+#@app.route('/save_flag_position/user_id=<user_id>&loid=<loid>&flag=<flag_number>&flag_coord=<flag_coord>')
+#def save_flag_position_by_learning_objective_id(user_id, loid, flag_number, flag_coord):
+   # """saves the flag position that is specific to user and learning objective id to flags position table
+   # Usage example : <hostname>/save_flag_positions/user_id=2345&loid=<loid>&flag=Flag1&flag_coord=5
+   # """
+   # if str(flag_number) == 'Flag1':
+   #     coordinates2.update({'UserId': int(user_id), 'LearningObjectiveId': int(loid)}, 
+   #                         {'$set': {'Flag1': int(flag_coord)}})
+    
+   # if str(flag_number) == 'Flag2':
+   #     coordinates2.update({'UserId': int(user_id), 'LearningObjectiveId': int(loid)}, 
+   #                         {'$set': {'Flag1': int(flag_coord)}})
+   # return jsonify(message="Flag position succesfully saved")
+
+
+
 if __name__ == '__main__':
     app.run()
+
