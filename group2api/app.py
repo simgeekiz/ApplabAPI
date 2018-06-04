@@ -249,29 +249,34 @@ def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
     return jsonify([data[index]['AbilityAfterAnswer']])
 
 
-@app.route('/upload_login_users')
-@requires_auth
+#@app.route('/upload_login_users')
+#@requires_auth
 def upload_login_users():
     """Generates user information with default values
 
     Usage example : <hostname>/user_login_info
     """
-  #  submissions_user_ids = submissions.distinct('UserId')
-  #  users_user_ids = users.distinct('UserId')
-  #  user_ids = [uid for uid in submissions_user_ids if
-   #             uid not in users_user_ids]
     import pandas as pd
-    filePathUser = "../../applab_data/deventerusers.csv"
+    filePathUser = "../../applab_data/deventerusers2.csv"
     dfuser = pd.read_csv(filePathUser, sep=',')
+    #submissions_user_ids = submissions.distinct('UserId')
+    add_user_ids = dfuser['UserId']
+    users_user_ids = users.distinct('UserId')
+    #user_ids = [uid for uid in submissions_user_ids if
+              #  uid not in users_user_ids]
+    user_ids = [uid for uid in add_user_ids if
+                 uid not in users_user_ids]
+        
     for i,row in dfuser.iterrows():
-    #print(row['UserName'], row['UserId'])
+       # print(row['UserName'], row['UserId'])
+        user_ids = row['UserId']
         user_info = {}
         user_info['UserId'] = row['UserId']
         user_info['UserName'] = str(row['UserName'])
         user_info['Password'] = str(row['UserName']) + '!' 
         users.insert(user_info)
-   # for uid in user_ids:
-       # hashed_password = generate_password_hash(str(uid) + "!", method='sha256')
+    #for uid in user_ids:
+    #    hashed_password = generate_password_hash(str(uid) + "!", method='sha256')
     #    user_info = {}
     #    user_info['UserId'] = uid
     #    user_info['UserName'] = 'user{}'.format(str(uid))
@@ -280,7 +285,7 @@ def upload_login_users():
     return jsonify(message="Users generated")
 
 @app.route('/upload_auth_user')
-@requires_auth
+#@requires_auth
 def upload_auth_user():
     """
     Usage example : <hostname>/upload_auth_user
