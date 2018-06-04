@@ -10,15 +10,18 @@ import json
 
 sys.path.append('..')
 
+
+
+
 # helper function
 def get_date_from_str(yyyymmdd):
     """Return a datetime representation of the date
-    
+
     Parameters
     ----------
     yyyymmdd : string,
         Date string in format yyyy-mm-dd. Division symbols can differ
-        
+
     Returns
     -------
     date : datetime,
@@ -42,7 +45,7 @@ class MyEncoder(json.JSONEncoder):
 
 
 class DataHandler():
-    
+
     def __init__(self, submissions=None):
         df = pd.DataFrame(submissions)
         self.dates = np.array(df['SubmitDateTime'])
@@ -53,6 +56,11 @@ class DataHandler():
         self.ability_scores = np.array(df['AbilityAfterAnswer'])
         self.m2m = MomentByMoment(self.user_ids, self.corrects, self)
         # release memory
+        self.avg_ltgs = [[0.5, 0.1, 0.299, 0.1],
+                        [0.5, 0.1, 0.299, 0.1],
+                        [0.5, 0.1, 0.299, 0.1],
+                        [0.5, 0.1, 0.299, 0.1],
+                        ]
         del df
 
     def get_max_row(self, column=1):
@@ -119,7 +127,7 @@ class DataHandler():
                                   date_id=None):
         # todo: change from answers to coordinates
         if date_id is None:
-            answers = self.corrects[np.where((self.user_ids == user_id)& 
+            answers = self.corrects[np.where((self.user_ids == user_id)&
                                              (self.learn_obj_ids == loid))]
         else:
             datelist = []
@@ -132,12 +140,12 @@ class DataHandler():
                     datelist.append(None)
             datelist = np.array(datelist)
             answers = self.corrects[np.where((self.user_ids == user_id) &
-                                             (datelist == date_id) & 
+                                             (datelist == date_id) &
                                              # date_id is 2017-11-28 but self dates= 2017-11-28 09:49:11.913
                                              (self.learn_obj_ids == loid))]
             #if (datelist == date_id):
-             #   print("entered id")
-            print("date_id",type(date_id), type(datelist[0]), date_id==datelist[0])       
+            #   print("entered id")
+            print("date_id",type(date_id), type(datelist[0]), date_id==datelist[0])
         same = list(np.ones(len(answers)))
         try:
             same[0] = 0
@@ -177,6 +185,14 @@ class DataHandler():
         if max_val > 0:
             coords = [i/max_val for i in coords]
         return coords
+
+    def fast_coords_for_today(self, user_id, corrects, day):
+        parameters = self.avg_ltgs[day]
+        user_m2m = deepcopy(self.m2m)
+        user_m2m.set_initial_probabilities(*parameters)
+        p_j = user_m2m.get_p_j(user_id, answers=corrects)
+        coordinates = self.from_p_j_to_coord(p_j)
+        return coordinates
 
 
 class MomentByMoment():

@@ -614,7 +614,7 @@ def fast_m2m(user_id, loid, day=None):
         if day is None:
             day = 1
         answers = submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})
-        answers = [a for a in answers]
+        answers = [a["correct"] for a in answers]
         return jsonify(answers)
     except Exception as e:
         return jsonify(message="Something went wrong {}".format(e))
