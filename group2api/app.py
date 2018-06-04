@@ -615,20 +615,17 @@ def calculate_m2m_coordinates(user_id, loid, date=None):
 @app.route('/fast_m2m/user_id=<user_id>/loid=<loid>/day=<day>')
 @requires_auth
 def fast_m2m(user_id, loid, day=None):
-    try:
-        if day is None:
-            day = 1
-        submissiondata = submissions.find({}, {'_id': 0})
-        sub = [u for u in submissiondata]
-        answers = submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})
-        answers = [a["Correct"] for a in answers]
-        coords = mo.DataHandler(sub).fast_coords_for_today(user_id, answers, day)
-    except Exception as e:
-        return jsonify(message="Something went wrong {}".format(e))
+    if day is None:
+        day = 1
+    submissiondata = submissions.find({}, {'_id': 0})
+    sub = [u for u in submissiondata]
+    answers = submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})
+    answers = [a["Correct"] for a in answers]
+    coords = mo.DataHandler(sub).fast_coords_for_today(user_id, answers, int(day)-1)
     return jsonify(coords)
 
 
-@app.route('/fast_m2m/user_id=<user_id>/loid=<loid>')
+@app.route('/fast_all/user_id=<user_id>/loid=<loid>')
 @requires_auth
 def fast_all(user_id, loid):
     try:
