@@ -618,11 +618,31 @@ def fast_m2m(user_id, loid, day=None):
     try:
         if day is None:
             day = 1
+        submissiondata = submissions.find({}, {'_id': 0})
+        sub = [u for u in submissiondata]
         answers = submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})
-        answers = [a["correct"] for a in answers]
-        return jsonify(answers)
+        answers = [a["Correct"] for a in answers]
+        coords = mo.DataHandler(sub).fast_coords_for_today(user_id, answers, day)
     except Exception as e:
         return jsonify(message="Something went wrong {}".format(e))
+    return jsonify(coords)
+
+
+@app.route('/fast_m2m/user_id=<user_id>/loid=<loid>')
+@requires_auth
+def fast_all(user_id, loid):
+    try:
+        ret = {}
+        submissiondata = submissions.find({}, {'_id': 0})
+        sub = [u for u in submissiondata]
+        days = [d for d in submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid)}).distinct('Days')]
+        for day in days:
+            answers = [a["Correct"] for a in submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})]
+            coords = mo.DataHandler(sub).fast_coords_for_today(user_id, answers, day)
+            ret["coords_day{}".format(day)] = coords
+    except Exception as e:
+        return jsonify(message="Something went wrong {}".format(e))
+    return ret
 
 @app.route('/flag_positions')
 @requires_auth
