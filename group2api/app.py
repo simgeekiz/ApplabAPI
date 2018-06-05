@@ -498,6 +498,7 @@ def add_days(start_date, end_date):
 def hotfix(s):
     if s == "hotfix":
         submissions.remove({})
+    return jsonify(message="hotfix cleared the data")
 
 
 @app.route('/insert', methods=['POST'])
