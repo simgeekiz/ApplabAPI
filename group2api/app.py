@@ -172,7 +172,7 @@ def get_data_by_date(date):
     Parameters
     ----------
     date : string
-        Give the date string in YYYY-DD-MM format.
+        Give the date string in YYYY-MM-DD format.
 
     Returns
     -------
@@ -472,10 +472,10 @@ def add_days(start_date, end_date):
     Parameters
     ----------
     start_date : string
-        Give the starting date as string in YYYY-DD-MM format.
+        Give the starting date as string in YYYY-MM-DD format.
         
     end_date : string
-        Give the ending date as string in YYYY-DD-MM format.
+        Give the ending date as string in YYYY-MM-DD format.
     """
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d')
@@ -517,8 +517,8 @@ def insert():
     try:
         for item in data_:
             submissions.insert(item)
-    except:
-        return jsonify(error="Error during insertion to database")
+    except Exception as e:
+        return jsonify(error="Error during insertion to database\n{}".format(e))
     
     try:
         response_time_enrichment(user_id='all')
@@ -625,6 +625,8 @@ def fast_m2m(user_id, loid, day=None):
     answers = submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})
     answers = [a["Correct"] for a in answers]
     coords = mo.DataHandler(sub).fast_coords_for_today(user_id, answers, int(day)-1)
+    if not coords[-1] == 0:
+        coords.append(0)
     return json.dumps(coords, cls=mo.MyEncoder)
 
 
