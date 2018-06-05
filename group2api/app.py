@@ -633,7 +633,7 @@ def fast_m2m(user_id, loid, day=None):
     answers = [a["Correct"] for a in answers]
     coords = mo.DataHandler(sub).fast_coords_for_today(user_id, answers, int(day)-1)
     if not coords[-1] == 0:
-        coords.append(0)
+        coords.append(0.0)
     return json.dumps(coords, cls=mo.MyEncoder)
 
 
