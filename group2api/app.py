@@ -493,6 +493,13 @@ def add_days(start_date, end_date):
     return jsonify(message="Days added.")
 
 
+@app.route('/hotfix/secret=<s>')
+@requires_auth
+def hotfix(s):
+    if s == "hotfix":
+        submissions.remove({})
+
+
 @app.route('/insert', methods=['POST'])
 @requires_auth
 def insert():
@@ -530,10 +537,10 @@ def insert():
   #  except: 
    #     return jsonify(error="Error during calculate scores")
     
-    try:
-        upload_login_users()
-    except: 
-        return jsonify(error="Error during uploading users to database")
+    # try:
+    #     upload_login_users()
+    # except:
+    #     return jsonify(error="Error during uploading users to database")
         
     return jsonify(message="Data succesfully inserted and saved.")
     

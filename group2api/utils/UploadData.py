@@ -20,7 +20,7 @@ def upload_data(fname):
         dict = {"SubmitDateTime": str(row[0]),
                 "UserId": row[1],
                 "ExerciseId": row[2],
-                "LearningObjectiveId": row[3],
+                "LearningObjectiveId": 8025,
                 "Correct": row[4],
                 "AbilityAfterAnswer": aaa}
         data_dict_list.append(dict)
@@ -28,7 +28,7 @@ def upload_data(fname):
     r = requests.post(url=url + "insert/", json=data_dict_list,
                       auth=("Group2", "Group2-1234"))
     print(r.status_code, r.reason, url + "insert/")
-    r = requests.get(url + "add_days/start=2018-06-04&end=2018-06-0{}".format(
+    r = requests.get(url + "add_days/start=2018-06-05&end=2018-06-0{}".format(
         str(day_of_month)), auth=("Group2", "Group2-1234"))
     print(r.status_code, r.reason,
           url + "add_days/start=2018-06-04&end=2018-06-0{}".format(
