@@ -238,7 +238,10 @@ def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
     data = [d for d in scores]
     
     for i in data:
-        datetime_list.append(datetime.strptime(i['SubmitDateTime'], '%Y-%m-%d %H:%M:%S.%f'))
+        try:
+            datetime_list.append(datetime.strptime(i['SubmitDateTime'], '%Y-%m-%d %H:%M:%S.%f'))
+        except ValueError:
+            datetime_list.append(datetime.strptime(i['SubmitDateTime'], '%Y-%m-%d %H:%M:%S'))
     try:
         index = datetime_list.index(max(datetime_list))
     except Exception:
@@ -249,15 +252,15 @@ def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
     return jsonify([data[index]['AbilityAfterAnswer']])
 
 
-#@app.route('/upload_login_users')
-#@requires_auth
+@app.route('/upload_login_users')
+@requires_auth
 def upload_login_users():
     """Generates user information with default values
 
     Usage example : <hostname>/user_login_info
     """
     import pandas as pd
-    filePathUser = "../../applab_data/deventerusers2.csv"
+    filePathUser = "../../applab_data/deventerusers.csv"
     dfuser = pd.read_csv(filePathUser, sep=',')
     #submissions_user_ids = submissions.distinct('UserId')
     add_user_ids = dfuser['UserId']
@@ -622,7 +625,7 @@ def fast_m2m(user_id, loid, day=None):
     answers = submissions.find({"UserId" : int(user_id), "LearningObjectiveId": int(loid), "Days": int(day)}, {'_id':0, "Correct":1})
     answers = [a["Correct"] for a in answers]
     coords = mo.DataHandler(sub).fast_coords_for_today(user_id, answers, int(day)-1)
-    return jsonify(coords)
+    return json.dumps(coords, cls=mo.MyEncoder)
 
 
 @app.route('/fast_all/user_id=<user_id>/loid=<loid>')

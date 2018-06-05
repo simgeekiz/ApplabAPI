@@ -56,9 +56,9 @@ class DataHandler():
         self.ability_scores = np.array(df['AbilityAfterAnswer'])
         self.m2m = MomentByMoment(self.user_ids, self.corrects, self)
         # release memory
-        self.avg_ltgs = [[0.999, 0.125, 0.299, 0.099],
-                        [0.5, 0.1, 0.299, 0.1],
-                        [0.5, 0.1, 0.299, 0.1],
+        self.avg_ltgs = [[0.536, 0.101, 0.232, 0.1],
+                        [0.027, 0.059, 0.250, 0.1],
+                        [0.001, 0.149, 0.1],
                         [0.5, 0.1, 0.299, 0.1],
                         ]
         del df
