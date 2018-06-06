@@ -246,7 +246,7 @@ def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
         index = datetime_list.index(max(datetime_list))
     except Exception:
         return jsonify([0])
-    while (data[index]['AbilityAfterAnswer'] == None):
+    while (data[index]['AbilityAfterAnswer'] == 'NULL'):
         datetime_list.pop(index)
         index = datetime_list.index(max(datetime_list))
     return jsonify([data[index]['AbilityAfterAnswer']])
@@ -524,14 +524,14 @@ def insert():
         return jsonify(error="Data should be a list format.")
     try:
         for item in data_:
-            submissions.insert(item)
+            submissions.insert_one(item)
     except Exception as e:
         return jsonify(error="Error during insertion to database\n{}".format(e))
     
-    try:
-        response_time_enrichment(user_id='all')
-    except:
-        return jsonify(error="Error during response time enrichment")
+#    try:
+ #       response_time_enrichment(user_id='all')
+  #  except:
+   #     return jsonify(error="Error during response time enrichment")
     
    # try:
   #      calculate_scores(user_id='all')
