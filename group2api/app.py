@@ -246,9 +246,12 @@ def get_ability_score_by_day_number(day_number, user_id, learning_obj_id):
         index = datetime_list.index(max(datetime_list))
     except Exception:
         return jsonify([0])
-    while (data[index]['AbilityAfterAnswer'] == 'NULL'):
-        datetime_list.pop(index)
-        index = datetime_list.index(max(datetime_list))
+    try:
+        while (data[index]['AbilityAfterAnswer'] == 'NULL'):
+            datetime_list.pop(index)
+            index = datetime_list.index(max(datetime_list))
+    except Exception:
+        return jsonify([0])
     return jsonify([data[index]['AbilityAfterAnswer']])
 
 
@@ -274,8 +277,8 @@ def upload_login_users():
        # print(row['UserName'], row['UserId'])
         user_ids = row['UserId']
         user_info = {}
-        user_info['UserId'] = row['UserId']
-        user_info['UserName'] = str(row['UserName'])
+        user_info['UserId'] = row['UserId']+3000
+        user_info['UserName'] = str(row['UserName'])+'Wo'
         user_info['Password'] = str(row['UserName']) + '!' 
         users.insert(user_info)
     #for uid in user_ids:
@@ -480,7 +483,7 @@ def add_days(start_date, end_date):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.strptime(end_date, '%Y-%m-%d')
     
-    date_list = [((start_date + timedelta(n)).strftime('%Y-%m-%d'), n+1)
+    date_list = [((start_date + timedelta(n)).strftime('%Y-%m-%d'), 1)
                  for n in range(int((end_date - start_date).days)+1)]
     
     submissions.update({}, {'$unset': {'Days': 1}}, multi=True)
