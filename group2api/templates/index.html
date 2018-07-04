@@ -34,6 +34,58 @@
 <div class="section" id="module-group2api.app">
 <span id="app-py"></span><h2>app.py<a class="headerlink" href="#module-group2api.app" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="group2api.app.add_days">
+<code class="descclassname">group2api.app.</code><code class="descname">add_days</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.add_days" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the days information to the instances based on given interval</p>
+<p>Usage example : &lt;hostname&gt;/add_days/start=2017-11-28&amp;end=2017-12-04</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>start_date</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Give the starting date as string in YYYY-DD-MM format.</p>
+</dd>
+<dt><strong>end_date</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Give the ending date as string in YYYY-DD-MM format.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.calculate_m2m_coordinates">
+<code class="descclassname">group2api.app.</code><code class="descname">calculate_m2m_coordinates</code><span class="sig-paren">(</span><em>user_id</em>, <em>loid</em>, <em>date=None</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.calculate_m2m_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates coordinates that represent the learning of the moment-by-moment peaks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">The user for which the coordinates are calculated</span></dt>
+<dd></dd>
+<dt><strong>loid</strong> <span class="classifier-delimiter">:</span> <span class="classifier">The ID of the learning objective for which the coordinates are calculated</span></dt>
+<dd></dd>
+<dt><strong>date</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string, optional (default=None)</span></dt>
+<dd><p class="first last">pass in yyyy-mm-dd format. Will result in getting just the coordinates for that day</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>coords</strong> <span class="classifier-delimiter">:</span> <span class="classifier">The coordinates for which the</span></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="group2api.app.calculate_scores">
 <code class="descclassname">group2api.app.</code><code class="descname">calculate_scores</code><span class="sig-paren">(</span><em>user_id='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.calculate_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the ability scores for the given user or for all</p>
@@ -45,10 +97,144 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
 <dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string, (default=’all’)</span></dt>
 <dd><p class="first last">Give the id of the user. If given ‘all’, runs for
 each unique user in the database.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>response</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dictionary</span></dt>
+<dd><p class="first last">Contains a success message and a list of failed user ids.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.flag_positions">
+<code class="descclassname">group2api.app.</code><code class="descname">flag_positions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.flag_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a table for positon of flags</p>
+<p>Usage example : &lt;hostname&gt;/flag_positions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_ability_score_by_day_number">
+<code class="descclassname">group2api.app.</code><code class="descname">get_ability_score_by_day_number</code><span class="sig-paren">(</span><em>day_number</em>, <em>user_id</em>, <em>learning_obj_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_ability_score_by_day_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns ability score of the user accordind to learning obj id</p>
+<p>Usage example : &lt;hostname&gt;/scores/day=1§user_id=231412&amp;learning_obj_id=65745</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>day_number</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Give the date number like 1, 2, 3</p>
+</dd>
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the user</p>
+</dd>
+<dt><strong>learning_obj_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the learning objective</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>scores</strong> <span class="classifier-delimiter">:</span> <span class="classifier">an integer</span></dt>
+<dd><p class="first last">The ability score achieved by the user</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_ability_scores">
+<code class="descclassname">group2api.app.</code><code class="descname">get_ability_scores</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em>, <em>exercise_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_ability_scores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns ability score of the user on an exercise for a learning objective</p>
+<p>Usage example : &lt;hostname&gt;/scores/user_id=231412&amp;learning_obj_id=65745&amp;exercise_id=342342</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the user</p>
+</dd>
+<dt><strong>learning_obj_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the learning objective</p>
+</dd>
+<dt><strong>exercise_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
+<dd><p class="first last">Give the id of the exercise</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>scores</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
+<dd><p class="first last">The list of the ability scores achieved by the user</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_data_by_date">
+<code class="descclassname">group2api.app.</code><code class="descname">get_data_by_date</code><span class="sig-paren">(</span><em>date</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_data_by_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of data for one specific submission date</p>
+<p>Usage example : &lt;hostname&gt;/get_data/date=2017-11-28</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>date</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Give the date string in YYYY-DD-MM format.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Returns list of instances belongs to the date</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_data_by_day_number">
+<code class="descclassname">group2api.app.</code><code class="descname">get_data_by_day_number</code><span class="sig-paren">(</span><em>day_number</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_data_by_day_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of data for one specific submission date</p>
+<p>Usage example : &lt;hostname&gt;/get_data/day=1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>day_number</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Give the date number like 1, 2, 3.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">Returns list of instances belongs to one day</p>
 </dd>
 </dl>
 </td>
@@ -88,6 +274,20 @@ each unique user in the database.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="group2api.app.get_flag_position">
+<code class="descclassname">group2api.app.</code><code class="descname">get_flag_position</code><span class="sig-paren">(</span><em>user_id</em>, <em>loid</em>, <em>flag_number</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_flag_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>…
+Usage example : &lt;hostname&gt;/get_flag_position/user_id=2345&amp;flag=Flag1</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.get_flag_position2">
+<code class="descclassname">group2api.app.</code><code class="descname">get_flag_position2</code><span class="sig-paren">(</span><em>user_id</em>, <em>loid</em>, <em>flag_number='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_flag_position2" title="Permalink to this definition">¶</a></dt>
+<dd><p>…
+Usage example : &lt;hostname&gt;/get_flag_position/user_id=2345&amp;loid=8052&amp;flag=Flag1</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="group2api.app.get_number_of_submissions">
 <code class="descclassname">group2api.app.</code><code class="descname">get_number_of_submissions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_number_of_submissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gives the total number of submissions</p>
@@ -99,39 +299,6 @@ each unique user in the database.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>number_of_submissions</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
 <dd><p class="first last">The list of user’s ids</p>
-</dd>
-</dl>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="group2api.app.get_scores">
-<code class="descclassname">group2api.app.</code><code class="descname">get_scores</code><span class="sig-paren">(</span><em>user_id</em>, <em>learning_obj_id</em>, <em>exercise_id</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_scores" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns ability score of the user on an exercise for a learning objective</p>
-<p>Usage example : &lt;hostname&gt;/scores/user_id=231412&amp;learning_obj_id=65745&amp;exercise_id=342342</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd><p class="first last">Give the id of the user</p>
-</dd>
-<dt><strong>learning_obj_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd><p class="first last">Give the id of the learning objective</p>
-</dd>
-<dt><strong>exercise_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">integer or string</span></dt>
-<dd><p class="first last">Give the id of the exercise</p>
-</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>scores</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of integers</span></dt>
-<dd><p class="first last">The list of the ability scores achieved by the user</p>
 </dd>
 </dl>
 </td>
@@ -191,7 +358,7 @@ each unique user in the database.</p>
 <dt id="group2api.app.get_user_login_info">
 <code class="descclassname">group2api.app.</code><code class="descname">get_user_login_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.get_user_login_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists the userids, names and passwords</p>
-<p>Usage example : &lt;hostname&gt;/user_login_info</p>
+<p>Usage example : &lt;hostname&gt;/login_users</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -224,7 +391,7 @@ each unique user in the database.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>login_user</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dictionary</span></dt>
+<dt><strong>login_user</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
 <dd><p class="first last">User login information</p>
 </dd>
 </dl>
@@ -261,6 +428,20 @@ Usage example with Python requests library:</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="group2api.app.list_flag_positions">
+<code class="descclassname">group2api.app.</code><code class="descname">list_flag_positions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.list_flag_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>lists the flags position table
+Usage example : &lt;hostname&gt;/list_flag_positions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.list_flag_positions2">
+<code class="descclassname">group2api.app.</code><code class="descname">list_flag_positions2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.list_flag_positions2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists the flags position table</p>
+<p>Usage example : &lt;hostname&gt;/list_flag_positions2</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="group2api.app.response_time_enrichment">
 <code class="descclassname">group2api.app.</code><code class="descname">response_time_enrichment</code><span class="sig-paren">(</span><em>user_id='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.response_time_enrichment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates and adds the response time for each submission</p>
@@ -285,6 +466,31 @@ each unique user in the database.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="group2api.app.save_flag_position">
+<code class="descclassname">group2api.app.</code><code class="descname">save_flag_position</code><span class="sig-paren">(</span><em>user_id</em>, <em>flag_number</em>, <em>flag_coord</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.save_flag_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>saves the flag position that is specific to user to flags position table
+Usage example : &lt;hostname&gt;/save_flag_position/user_id=2345&amp;flag=Flag1&amp;flag_coord=5</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.save_flag_position2">
+<code class="descclassname">group2api.app.</code><code class="descname">save_flag_position2</code><span class="sig-paren">(</span><em>user_id</em>, <em>loid</em>, <em>flag_number</em>, <em>flag_coord</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.save_flag_position2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the flag position that is specific to user and for the given learning objective to flags position table</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>user_id</strong> <span class="classifier-delimiter">:</span> <span class="classifier">…</span></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="group2api.app.serve_docs">
 <code class="descclassname">group2api.app.</code><code class="descname">serve_docs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.serve_docs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display the documentations</p>
@@ -296,6 +502,13 @@ each unique user in the database.</p>
 <code class="descclassname">group2api.app.</code><code class="descname">upload_login_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.upload_login_users" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates user information with default values</p>
 <p>Usage example : &lt;hostname&gt;/user_login_info</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="group2api.app.user_login">
+<code class="descclassname">group2api.app.</code><code class="descname">user_login</code><span class="sig-paren">(</span><em>user_id</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#group2api.app.user_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the requested used_id is present in the submission list,
+and if the password matches the one set by the user.</p>
 </dd></dl>
 
 </div>
