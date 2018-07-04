@@ -18,18 +18,17 @@ def upload_data(fname):
         if math.isnan(aaa):
             aaa = 'NULL'
         dict = {"SubmitDateTime": str(row[0]),
-                "UserId": row[1],
+                "UserId": row[1]+1000,
                 "ExerciseId": row[2],
                 "LearningObjectiveId": 8025,
-                "Correct": row[4],
+                "Correct": min(row[4], 1),
                 "AbilityAfterAnswer": aaa}
         data_dict_list.append(dict)
-        print(dict)
-    r = requests.post(url=url + "insert/", json=data_dict_list,
-                      auth=("Group2", "Group2-1234"))
-    print(r.status_code, r.reason, url + "insert/")
-    r = requests.get(url + "add_days/start=2018-06-05&end=2018-06-0{}".format(
-        str(day_of_month)), auth=("Group2", "Group2-1234"))
+        print(dict, ",")
+    # r = requests.post(url=url + "insert/", json=data_dict_list[0],
+    #                   auth=("Group2", "Group2-1234"))
+    # print(r.status_code, r.reason, url + "insert/")
+    r = requests.get(url + "add_days/start=2018-06-04&end=2018-06-0{}".format( str(day_of_month)), auth=("Group2", "Group2-1234"))
     print(r.status_code, r.reason,
           url + "add_days/start=2018-06-04&end=2018-06-0{}".format(
               day_of_month))
@@ -48,5 +47,5 @@ def create_url():
 if __name__ == "__main__":
     day_of_month = 6
     upload_data("C:/Users/Rick "
-                "Dijkstra/Documents/Study/Applab/SnappetDataAnoniem/Kopie van "
-                "resultaten-radboud_anoniem 5-6-18.xlsx")
+                "Dijkstra/Documents/Study/Applab/SnappetDataAnoniem/"
+                "resultaten-radboud_anoniem 4-6-18.xlsx")
